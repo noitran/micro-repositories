@@ -5,11 +5,20 @@ namespace Noitran\Repositories\Repositories;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
+use Noitran\Repositories\Contracts\Criteria\CriteriaInterface;
 use Noitran\Repositories\Contracts\Repository\RepositoryInterface;
+use Noitran\Repositories\Contracts\Schema\SchemaInterface;
 use Noitran\Repositories\Exceptions\RepositoryException;
+use Illuminate\Support\Collection;
+use Closure;
 
-abstract class AbstractRepository implements RepositoryInterface
+/**
+ * Class AbstractRepository
+ */
+abstract class AbstractRepository implements RepositoryInterface, SchemaInterface
 {
+    use InteractsWithSchema;
+
     /**
      * @var Container
      */
@@ -19,6 +28,23 @@ abstract class AbstractRepository implements RepositoryInterface
      * @var Model
      */
     protected $model;
+
+    /**
+     * Collection of Criteria
+     *
+     * @var Collection
+     */
+    protected $criteria;
+
+    /**
+     * @var bool
+     */
+    protected $skipCriteria = false;
+
+    /**
+     * @var Closure
+     */
+    protected $scopeQuery;
 
     /**
      * AbstractRepository constructor.
@@ -75,6 +101,52 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
     /**
+     * Get Collection of Criteria
+     *
+     * @return Collection|null
+     */
+    public function getCriteria(): ?Collection
+    {
+        return $this->criteria;
+    }
+
+    /**
+     * Clears model
+     *
+     * @throws RepositoryException
+     */
+    public function clearModel(): self
+    {
+        $this->setModel();
+
+        return $this;
+    }
+
+    /**
+     * Clear all Criteria
+     *
+     * @return $this
+     */
+    public function clearCriteria(): self
+    {
+        $this->criteria = new Collection();
+
+        return $this;
+    }
+
+    /**
+     * Clears query scope
+     *
+     * @return $this
+     */
+    public function clearScope(): self
+    {
+        $this->scopeQuery = null;
+
+        return $this;
+    }
+
+    /**
      * @return $this
      */
     public function withTrashed(): self
@@ -85,44 +157,117 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
     /**
-     * @param string $column
-     * @param Model $model
+     * Apply criteria in current Query
      *
-     * @return string
+     * @return $this
      */
-    public function getColumnName($column, $model = null): string
+    protected function applyCriteria(): self
     {
-        return $column;
-    }
-
-    /**
-     * @param array $columns
-     * @param Model $model
-     *
-     * @return array
-     */
-    public function getColumnNames(array $columns, $model = null): array
-    {
-        return array_map(function ($column) use ($model) {
-            return $this->getColumnName($column, $model);
-        }, $columns);
-    }
-
-    /**
-     * @param Model $model
-     *
-     * @return string
-     */
-    public function getSchemaName($model = null): string
-    {
-        $model = $model ?? $this->model;
-
-        if ($model instanceof Model) {
-            return $model->getTable();
-        } elseif ($model instanceof EloquentBuilder) {
-            return $model->getModel()->getTable();
+        if ($this->skipCriteria === true) {
+            return $this;
         }
 
-        return $model->from;
+        $criteria = $this->getCriteria();
+
+        if (! $criteria) {
+            return $this;
+        }
+
+        foreach ($criteria as $c) {
+            if ($c instanceof CriteriaInterface) {
+                $this->model = $c->apply($this->model, $this);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Apply scope in current Query
+     *
+     * @return $this
+     */
+    protected function applyScope(): self
+    {
+        if (isset($this->scopeQuery) && is_callable($this->scopeQuery)) {
+            $callback = $this->scopeQuery;
+            $this->model = $callback($this->model);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get list of records
+     *
+     * @param array $columns
+     *
+     * @throws RepositoryException
+     *
+     * @return EloquentBuilder[]|\Illuminate\Database\Eloquent\Collection|Model[]|mixed
+     */
+    public function all($columns = ['*'])
+    {
+        $this->applyCriteria()
+            ->applyScope();
+
+        if ($this->model instanceof EloquentBuilder) {
+            $output = $this->model->get($columns);
+        } else {
+            $output = $this->model::all($columns);
+        }
+
+        $this->clearModel()
+            ->clearScope();
+
+        return $output;
+    }
+
+    /**
+     * Get collection of paginated records
+     *
+     * @param null $perPage
+     * @param array $columns
+     *
+     * @throws RepositoryException
+     *
+     * @return mixed
+     */
+    public function paginate($perPage = null, $columns = ['*'])
+    {
+        $this->applyCriteria()
+            ->applyScope();
+
+        $perPage = $perPage ?? config('repositories.pagination.per_page', $this->model->getPerPage());
+
+        $results = $this->model
+            ->paginate($perPage, $columns)
+            ->appends(app('request')->query());
+
+        $this->clearModel();
+
+        return $results;
+    }
+
+    /**
+     * Get single or multiple records by their primary ids
+     *
+     * @param mixed $id
+     * @param array $columns
+     *
+     * @throws RepositoryException
+     *
+     * @return mixed
+     */
+    public function find($id, $columns = ['*'])
+    {
+        $this->applyCriteria()
+            ->applyScope();
+
+        $model = $this->model->findOrFail($id, $columns);
+
+        $this->clearModel();
+
+        return $model;
     }
 }

@@ -2,35 +2,43 @@
 
 namespace Noitran\Repositories\Contracts\Repository;
 
+use Noitran\Repositories\Exceptions\RepositoryException;
+
 /**
  * Interface RepositoryInterface
  */
 interface RepositoryInterface
 {
     /**
-     * Get collection
+     * Get list of records
      *
      * @param array $columns
+     *
+     * @throws RepositoryException
      *
      * @return mixed
      */
     public function all($columns = ['*']);
 
     /**
-     * Get paginated collection
+     * Get collection of paginated records
      *
-     * @param null $limit
+     * @param null $perPage
      * @param array $columns
+     *
+     * @throws RepositoryException
      *
      * @return mixed
      */
-    public function paginate($limit = null, $columns = ['*']);
+    public function paginate($perPage = null, $columns = ['*']);
 
     /**
-     * Find by id
+     * Get single or multiple records by their primary ids
      *
-     * @param $id
+     * @param mixed $id
      * @param array $columns
+     *
+     * @throws RepositoryException
      *
      * @return mixed
      */
