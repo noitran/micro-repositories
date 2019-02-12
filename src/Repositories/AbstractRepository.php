@@ -5,19 +5,23 @@ namespace Noitran\Repositories\Repositories;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
-use Noitran\Repositories\Contracts\Criteria\CriteriaInterface;
+use Noitran\Repositories\Contracts\Repository\Criticizable;
 use Noitran\Repositories\Contracts\Repository\RepositoryInterface;
 use Noitran\Repositories\Contracts\Schema\SchemaInterface;
+use Noitran\Repositories\Events\EntityCreated;
+use Noitran\Repositories\Events\EntityDeleted;
+use Noitran\Repositories\Events\EntityUpdated;
 use Noitran\Repositories\Exceptions\RepositoryException;
-use Illuminate\Support\Collection;
 use Closure;
 
 /**
  * Class AbstractRepository
  */
-abstract class AbstractRepository implements RepositoryInterface, SchemaInterface
+abstract class AbstractRepository implements RepositoryInterface, SchemaInterface, Criticizable
 {
-    use InteractsWithSchema;
+    use Concerns\InteractsWithSchema,
+        Concerns\HasCriteria,
+        Concerns\BuildsQueries;
 
     /**
      * @var Container
@@ -30,21 +34,9 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     protected $model;
 
     /**
-     * Collection of Criteria
-     *
-     * @var Collection
-     */
-    protected $criteria;
-
-    /**
-     * @var bool
-     */
-    protected $skipCriteria = false;
-
-    /**
      * @var Closure
      */
-    protected $scopeQuery;
+    protected $scope;
 
     /**
      * AbstractRepository constructor.
@@ -94,20 +86,12 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
         $model = $this->app->make($this->getModelClassName());
 
         if (! $model instanceof Model) {
-            throw new RepositoryException("Class {$this->getModelClassName()} must be an instance of " . Model::class);
+            throw new RepositoryException(
+                "Class {$this->getModelClassName()} must be an instance of " . Model::class
+            );
         }
 
         return $this->model = $model;
-    }
-
-    /**
-     * Get Collection of Criteria
-     *
-     * @return Collection|null
-     */
-    public function getCriteria(): ?Collection
-    {
-        return $this->criteria;
     }
 
     /**
@@ -123,13 +107,13 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     }
 
     /**
-     * Clear all Criteria
+     * @param Closure $scope
      *
      * @return $this
      */
-    public function clearCriteria(): self
+    public function setScope(Closure $scope): self
     {
-        $this->criteria = new Collection();
+        $this->scope = $scope;
 
         return $this;
     }
@@ -141,43 +125,7 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
      */
     public function clearScope(): self
     {
-        $this->scopeQuery = null;
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function withTrashed(): self
-    {
-        $this->model = $this->model->withTrashed();
-
-        return $this;
-    }
-
-    /**
-     * Apply criteria in current Query
-     *
-     * @return $this
-     */
-    protected function applyCriteria(): self
-    {
-        if ($this->skipCriteria === true) {
-            return $this;
-        }
-
-        $criteria = $this->getCriteria();
-
-        if (! $criteria) {
-            return $this;
-        }
-
-        foreach ($criteria as $c) {
-            if ($c instanceof CriteriaInterface) {
-                $this->model = $c->apply($this->model, $this);
-            }
-        }
+        $this->scope = null;
 
         return $this;
     }
@@ -189,8 +137,8 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
      */
     protected function applyScope(): self
     {
-        if (isset($this->scopeQuery) && is_callable($this->scopeQuery)) {
-            $callback = $this->scopeQuery;
+        if (isset($this->scope) && is_callable($this->scope)) {
+            $callback = $this->scope;
             $this->model = $callback($this->model);
         }
 
@@ -224,26 +172,72 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     }
 
     /**
+     * Alias of all()
+     *
+     * @param array $columns
+     *
+     * @throws RepositoryException
+     *
+     * @return EloquentBuilder[]|\Illuminate\Database\Eloquent\Collection|Model[]|mixed
+     */
+    public function get($columns = ['*'])
+    {
+        return $this->all($columns);
+    }
+
+    /**
      * Get collection of paginated records
      *
-     * @param null $perPage
+     * @param int|null $perPage
      * @param array $columns
      *
      * @throws RepositoryException
      *
      * @return mixed
      */
-    public function paginate($perPage = null, $columns = ['*'])
+    public function paginate(int $perPage = null, $columns = ['*'])
+    {
+        return $this->getPaginator($perPage, $columns, function ($perPage, $columns) {
+            return $this->model
+                ->paginate($perPage, $columns)
+                ->appends(app('request')->query());
+        });
+    }
+
+    /**
+     * @param int|null $perPage
+     * @param array $columns
+     *
+     * @throws RepositoryException
+     *
+     * @return mixed
+     */
+    public function simplePaginate(int $perPage = null, $columns = ['*'])
+    {
+        return $this->getPaginator($perPage, $columns, function ($perPage, $columns) {
+            return $this->model
+                ->simplePaginate($perPage, $columns)
+                ->appends(app('request')->query());
+        });
+    }
+
+    /**
+     * @param int|null $perPage
+     * @param array $columns
+     * @param callable|null $callback
+     *
+     * @throws RepositoryException
+     *
+     * @return mixed
+     */
+    protected function getPaginator(int $perPage = null, $columns = ['*'], callable $callback = null)
     {
         $this->applyCriteria()
             ->applyScope();
 
         $perPage = $perPage ?? config('repositories.pagination.per_page', $this->model->getPerPage());
 
-        $results = $this->model
-            ->paginate($perPage, $columns)
-            ->appends(app('request')->query());
-
+        $results = $callback($perPage, $columns);
         $this->clearModel();
 
         return $results;
@@ -264,10 +258,135 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
         $this->applyCriteria()
             ->applyScope();
 
-        $model = $this->model->findOrFail($id, $columns);
+        $model = $this->model->find($id, $columns);
 
         $this->clearModel();
 
         return $model;
+    }
+
+    /**
+     * @param $field
+     * @param null $value
+     * @param array $columns
+     *
+     * @return mixed
+     * @throws RepositoryException
+     */
+    public function findByField($field, $value = null, $columns = ['*'])
+    {
+        $this->applyCriteria()
+            ->applyScope();
+
+        $results = $this->model
+            ->where($field, '=', $value)
+            ->get($columns);
+
+        $this->clearModel();
+
+        return $results;
+    }
+
+    /**
+     * Count results of repository
+     *
+     * @param array $columns
+     *
+     * @return int
+     * @throws RepositoryException
+     */
+    public function count($columns = ['*']): int
+    {
+        $this->applyCriteria()
+            ->applyScope();
+
+        $count = $this->model->count($columns);
+
+        $this->clearModel();
+
+        return $count;
+    }
+
+    /**
+     * Execute the query and get the first result.
+     *
+     * @param array $columns
+     *
+     * @return mixed
+     * @throws RepositoryException
+     */
+    public function first($columns = ['*']): ?Model
+    {
+        $this->applyCriteria()
+            ->applyScope();
+
+        $model = $this->model->first($columns);
+
+        $this->clearModel();
+
+        return $model;
+    }
+
+    /**
+     * @param array $attributes
+     *
+     * @return Model|null
+     * @throws RepositoryException
+     */
+    public function create(array $attributes = []): ?Model
+    {
+        $model = $this->model->create($attributes);
+
+        $this->clearModel();
+
+        event(new EntityCreated($this, $model));
+
+        return $model;
+    }
+
+    /**
+     * @param mixed $model
+     * @param array $attributes
+     *
+     * @return Model
+     * @throws RepositoryException
+     */
+    public function update($model, array $attributes): Model
+    {
+        $this->applyScope();
+
+        if (! $model instanceof Model) {
+            $model = $this->model->findOrFail($model);
+        }
+
+        $model->fill($attributes)->save();
+
+        $this->clearModel();
+
+        event(new EntityUpdated($this, $model));
+
+        return $model;
+    }
+
+    /**
+     * @param $model
+     *
+     * @return bool|null
+     * @throws RepositoryException
+     */
+    public function delete($model): ?bool
+    {
+        $this->applyScope();
+
+        if (! $model instanceof Model) {
+            $model = $this->find($model);
+        }
+
+        $clonedModel = clone $model;
+        $deleted = $model->delete();
+
+        event(new EntityDeleted($this, $clonedModel));
+
+        return $deleted;
     }
 }

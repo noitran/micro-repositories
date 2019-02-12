@@ -1,6 +1,6 @@
 <?php
 
-namespace Noitran\Repositories\Repositories;
+namespace Noitran\Repositories\Repositories\Concerns;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
