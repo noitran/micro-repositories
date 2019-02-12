@@ -270,8 +270,9 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
      * @param null $value
      * @param array $columns
      *
-     * @return mixed
      * @throws RepositoryException
+     *
+     * @return mixed
      */
     public function findByField($field, $value = null, $columns = ['*'])
     {
@@ -292,8 +293,9 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
      *
      * @param array $columns
      *
-     * @return int
      * @throws RepositoryException
+     *
+     * @return int
      */
     public function count($columns = ['*']): int
     {
@@ -312,8 +314,9 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
      *
      * @param array $columns
      *
-     * @return mixed
      * @throws RepositoryException
+     *
+     * @return mixed
      */
     public function first($columns = ['*']): ?Model
     {
@@ -330,8 +333,9 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     /**
      * @param array $attributes
      *
-     * @return Model|null
      * @throws RepositoryException
+     *
+     * @return Model|null
      */
     public function create(array $attributes = []): ?Model
     {
@@ -348,8 +352,9 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
      * @param mixed $model
      * @param array $attributes
      *
-     * @return Model
      * @throws RepositoryException
+     *
+     * @return Model
      */
     public function update($model, array $attributes): Model
     {
@@ -371,8 +376,9 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     /**
      * @param $model
      *
-     * @return bool|null
      * @throws RepositoryException
+     *
+     * @return bool|null
      */
     public function delete($model): ?bool
     {
