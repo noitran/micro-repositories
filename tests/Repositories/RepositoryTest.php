@@ -4,11 +4,17 @@ namespace Noitran\Repositories\Tests\Criteria;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Noitran\Repositories\Events\EntityCreated;
+use Noitran\Repositories\Events\EntityDeleted;
+use Noitran\Repositories\Events\EntityUpdated;
 use Noitran\Repositories\Tests\Stubs\Models\User;
 use Noitran\Repositories\Tests\Stubs\Repositories\UserRepository;
 use Noitran\Repositories\Tests\TestCase;
 use Mockery;
 
+/**
+ * Class RepositoryTest
+ */
 class RepositoryTest extends TestCase
 {
     /**
@@ -99,6 +105,8 @@ class RepositoryTest extends TestCase
      */
     public function itShouldCreateNewModel(): void
     {
+        $this->expectsEvents(EntityCreated::class);
+
         $attributes = [
             'name' => 'Stub',
             'email' => 'stub@stub.com',
@@ -116,6 +124,8 @@ class RepositoryTest extends TestCase
      */
     public function itShouldUpdateModelById(): void
     {
+        $this->expectsEvents(EntityUpdated::class);
+
         $user = User::find(3);
         $attributes = [
             'name' => 'Updated.Name',
@@ -132,6 +142,8 @@ class RepositoryTest extends TestCase
      */
     public function itShouldUpdateModelByModel(): void
     {
+        $this->expectsEvents(EntityUpdated::class);
+
         $user = User::find(3);
         $attributes = [
             'name' => 'Updated.Name',
@@ -148,6 +160,8 @@ class RepositoryTest extends TestCase
      */
     public function itShouldDeleteModelByModelId(): void
     {
+        $this->expectsEvents(EntityDeleted::class);
+
         $user = User::find(3);
 
         $this->repository->delete($user->id);
@@ -159,9 +173,13 @@ class RepositoryTest extends TestCase
 
     /**
      * @test
+     *
+     * @throws \Noitran\Repositories\Exceptions\RepositoryException
      */
     public function itShouldDeleteModelByModel(): void
     {
+        $this->expectsEvents(EntityDeleted::class);
+
         $user = User::find(3);
 
         $this->repository->delete($user);

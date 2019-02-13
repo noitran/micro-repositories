@@ -78,11 +78,23 @@ trait HasCriteria
      *
      * @param $criteria
      *
-     * @return mixed
+     * @return $this
      */
-    public function popCriteria($criteria)
+    public function popCriteria($criteria): self
     {
-        // @todo implement
+        $this->criteria = $this->criteria->reject(function ($value) use ($criteria) {
+            if (is_object($value) && is_string($criteria)) {
+                return get_class($value) === $criteria;
+            }
+
+            if (is_string($value) && is_object($criteria)) {
+                return $value === get_class($criteria);
+            }
+
+            return get_class($value) === get_class($criteria);
+        });
+
+        return $this;
     }
 
     /**

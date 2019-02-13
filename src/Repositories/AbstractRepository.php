@@ -12,6 +12,7 @@ use Noitran\Repositories\Events\EntityCreated;
 use Noitran\Repositories\Events\EntityDeleted;
 use Noitran\Repositories\Events\EntityUpdated;
 use Noitran\Repositories\Exceptions\RepositoryException;
+use Illuminate\Support\Collection;
 use Closure;
 
 /**
@@ -59,7 +60,9 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
      */
     public function init(): self
     {
+        $this->criteria = new Collection();
         $this->setModel();
+        $this->boot();
 
         return $this;
     }
@@ -340,9 +343,7 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     public function create(array $attributes = []): ?Model
     {
         $model = $this->model->create($attributes);
-
         $this->clearModel();
-
         event(new EntityCreated($this, $model));
 
         return $model;
@@ -364,10 +365,8 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
             $model = $this->model->findOrFail($model);
         }
 
-        $model->fill($attributes)->save();
-
+        $model->update($attributes);
         $this->clearModel();
-
         event(new EntityUpdated($this, $model));
 
         return $model;
@@ -389,6 +388,7 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
         }
 
         $clonedModel = clone $model;
+        $this->clearModel();
         $deleted = $model->delete();
 
         event(new EntityDeleted($this, $clonedModel));

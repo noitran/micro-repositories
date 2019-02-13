@@ -25,6 +25,6 @@ class UserRepositoryEloquent extends SqlRepository implements UserRepository
      */
     public function boot(): void
     {
-        //
+        // $this->pushCriteria(app(RequestCriteria::class));
     }
 }
