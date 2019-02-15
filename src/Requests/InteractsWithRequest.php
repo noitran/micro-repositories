@@ -67,4 +67,18 @@ trait InteractsWithRequest
 
         return true;
     }
+
+    /**
+     * Returns array of query param keys.
+     *
+     * @param array $queryFilters
+     *
+     * @return array
+     */
+    public function getQueryParams(array $queryFilters): array
+    {
+        return array_map(function ($param) {
+            return $param['queryParameter'];
+        }, $queryFilters);
+    }
 }
