@@ -6,7 +6,6 @@ use Noitran\Repositories\Contracts\Filter\FilterInterface;
 use Noitran\Repositories\Contracts\Repository\RepositoryInterface;
 use Noitran\Repositories\Criteria\LimitBy;
 use Noitran\Repositories\Repositories\AbstractRepository;
-use Illuminate\Support\Collection;
 use Noitran\Repositories\Requests\InteractsWithRequest;
 
 /**
@@ -31,27 +30,20 @@ abstract class AbstractFilter implements FilterInterface
      */
     protected $querySettings = [];
 
-//    /**
-//     * @var array
-//     */
-//    protected $querySettings = [
-//        'paginate' => false,
-//        'per_page' => self::ITEMS_PER_PAGE,
-//        'page' => 1,
-//        'order_by' => 'created_at,desc',
-//    ];
-
+    /**
+     * AbstractFilter constructor.
+     */
     public function __construct()
     {
         $this->setQuerySettings();
     }
 
     /**
-     * @param AbstractRepository $repository
+     * @param RepositoryInterface $repository
      *
      * @return $this
      */
-    public function setRepository(AbstractRepository $repository): self
+    public function setRepository(RepositoryInterface $repository): self
     {
         $this->repository = $repository;
 
@@ -66,9 +58,7 @@ abstract class AbstractFilter implements FilterInterface
     public function setQueryFilters(array $queryFilters = []): self
     {
         $defaultQueryFilters = config('repositories.filtering.default_filters', []);
-//        $this->queryFilters = collect(
-//            array_merge($defaultQueryFilters, $queryFilters)
-//        );
+
         $this->queryFilters = array_merge($defaultQueryFilters, $queryFilters);
 
         return $this;
@@ -90,9 +80,6 @@ abstract class AbstractFilter implements FilterInterface
     public function setQuerySettings(array $querySettings = []): self
     {
         $defaultQuerySettings = config('repositories.filtering.default_settings', []);
-//        $this->querySettings = collect(
-//            array_merge($defaultQuerySettings, $querySettings)
-//        );
         $this->querySettings = array_merge($defaultQuerySettings, $querySettings);
 
         return $this;
@@ -208,7 +195,7 @@ abstract class AbstractFilter implements FilterInterface
     public function paginate(int $perPage = null)
     {
         if (! $perPage) {
-            $perPage = config('repositories.pagination.per_page');
+            $perPage = config('repositories.filtering.default_settings.per_page');
         }
 
         return $this->repository->paginate($perPage);

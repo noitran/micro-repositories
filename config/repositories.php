@@ -36,8 +36,8 @@ return [
              * Default criteria for ordering columns
              */
             [
-                'queryParameter' => 'filter',
-                'uses' => \Noitran\Repositories\Criteria\OrderBy::class
+                'queryParameter' => 'order_by',
+                'uses' => \Noitran\Repositories\Criteria\OrderBy::class,
             ],
 
             /*
@@ -45,7 +45,7 @@ return [
              */
             [
                 'queryParameter' => 'limit',
-                'uses' => \Noitran\Repositories\Criteria\LimitBy::class
+                'uses' => \Noitran\Repositories\Criteria\LimitBy::class,
             ],
         ],
 
@@ -65,10 +65,17 @@ return [
             'order_by' => 'created_at,desc',
 
             /*
-             * Default page in requests in not specified
+             * Default page in requests if not specified
              */
             'page' => 1,
 
+            /**
+             * Default per page value, if null then Model's default settings will be taken.
+             * Can be overridden by passing "per_page" query parameter.
+             *
+             * Example: ?per_page=30
+             */
+            'per_page' => 20,
         ],
     ],
 ];

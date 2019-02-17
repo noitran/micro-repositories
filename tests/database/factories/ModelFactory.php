@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 /** User */
 $factory->define(Noitran\Repositories\Tests\Stubs\Models\User::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
+        'name' => $faker->firstName,
+        'surname' => $faker->lastName,
         'email' => $faker->safeEmail,
         'password' => str_random(10),
     ];

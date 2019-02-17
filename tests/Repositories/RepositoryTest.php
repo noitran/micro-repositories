@@ -70,6 +70,20 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
+    public function itShouldFindByField(): void
+    {
+        $userToFind = User::find(3);
+
+        $users = $this->repository->findByField('email', $userToFind->email);
+
+        $this->assertCount(1, $users);
+        $this->assertInstanceOf(Collection::class, $users);
+        $this->assertEquals($userToFind->email, $users->first()->email);
+    }
+
+    /**
+     * @test
+     */
     public function itShouldGetPaginatedCollectionUsingPaginateMethod(): void
     {
         $users = $this->repository->paginate(3);

@@ -12,18 +12,44 @@ use Illuminate\Database\Eloquent\Builder;
 class FilterBy implements CriteriaInterface
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $filter;
+    protected $attributes;
+
+//    /**
+//     * @var array
+//     */
+//    protected $types = [
+//        'like',
+//        'string',
+//        'bool',
+//        'int',
+//        'date',
+//        'datetime',
+//    ];
+//
+//    /**
+//     * @var string
+//     */
+//    protected $defaultType = 'like';
+//
+//
+//    protected $comparisonOperators = [
+//        '=',
+//        'lte',
+//        'lt',
+//        'gte',
+//        'gt',
+//    ];
 
     /**
      * FilterBy constructor.
      *
-     * @param $filter
+     * @param $attributes
      */
-    public function __construct($filter)
+    public function __construct($attributes)
     {
-        $this->filter = $filter;
+        $this->attributes = $attributes;
     }
 
     /**
@@ -34,6 +60,26 @@ class FilterBy implements CriteriaInterface
      */
     public function apply($model, RepositoryInterface $repository): Builder
     {
+        if (! empty($this->attributes) && \is_array($this->attributes)) {
+            foreach ($this->attributes as $column => $value) {
+                $model = $this->applyFilter($model, $column, $value);
+            }
+        }
+
         return $model;
+    }
+
+    /**
+     * @param $model
+     * @param $column
+     * @param $value
+     *
+     * @return Builder
+     */
+    protected function applyFilter($model, $column, $value): Builder
+    {
+
+
+        dd([$column, $value]);
     }
 }

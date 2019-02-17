@@ -238,7 +238,7 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
         $this->applyCriteria()
             ->applyScope();
 
-        $perPage = $perPage ?? config('repositories.pagination.per_page', $this->model->getPerPage());
+        $perPage = $perPage ?? config('repositories.filtering.default_settings.per_page', $this->model->getPerPage());
 
         $results = $callback($perPage, $columns);
         $this->clearModel();

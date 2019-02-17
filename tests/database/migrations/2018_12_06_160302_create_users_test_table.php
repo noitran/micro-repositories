@@ -18,6 +18,8 @@ class CreateUsersTestTable extends Migration
             $table->string('uuid', 64)->nullable()->unique();
 
             $table->string('name')->nullable();
+            $table->string('surname')->nullable();
+
             $table->string('email')->nullable()->unique();
             $table->string('email_verification_token')->nullable();
             $table->timestamp('email_verified_at')->nullable();
