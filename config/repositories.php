@@ -1,22 +1,49 @@
 <?php
 
 return [
-    'pagination' => [
-
-        /**
-         * Default per page value, if null then Model's default settings will be taken.
-         * Can be overridden by passing "per_page" query parameter.
-         *
-         * Example: ?per_page=30
-         */
-        'per_page' => 20,
-
-    ],
 
     /*
      * Request filters that will be applied by default, allowing to use them in each query
      */
     'filtering' => [
+
+        /*
+         * List allowed logical operators for data filtering and comparision
+         */
+        'allowed_operators' => [
+            '$eq', // equal or =
+            '$lt', // less than
+            '$lte', // less than or equal
+            '$gt', // greater than
+            '$gte', // greater than or equal
+            '$like',
+            '$in',
+            '$not',
+            '$or',
+            '$and',
+        ],
+
+        /*
+         * What comparison operator should be used by default
+         */
+        'default_operator' => '$eq',
+
+        /*
+         * Available data types are treated in different ways.
+         * List of allowed data types
+         */
+        'allowed_data_types' => [
+            '$string',
+            '$bool',
+            '$int',
+            '$date',
+            '$datetime',
+        ],
+
+        /*
+         * How will be search values processed by default
+         */
+        'default_data_type' => '$string',
 
         /*
          * List of default query filters
@@ -69,7 +96,7 @@ return [
              */
             'page' => 1,
 
-            /**
+            /*
              * Default per page value, if null then Model's default settings will be taken.
              * Can be overridden by passing "per_page" query parameter.
              *

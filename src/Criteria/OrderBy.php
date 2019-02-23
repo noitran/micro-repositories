@@ -43,7 +43,6 @@ class OrderBy implements CriteriaInterface
      */
     public function setOrderByParameters($orderBy): void
     {
-
         [$column, $direction] = explode(',', $orderBy);
 
         $this->column = $column;

@@ -11,7 +11,6 @@ use Noitran\Repositories\Tests\TestCase;
  * Class FilterByTest
  *
  * https://jsonapi.org/recommendations/#filtering
- * https://jsonapi.org/recommendations/#filtering
  *
  * Request for all comments associated with a particular post
  * GET /comments?filter[post]=1 HTTP/1.1
@@ -30,11 +29,13 @@ use Noitran\Repositories\Tests\TestCase;
  * filter[author.name][eq]=John
  * filter[author.name][not-eq]=John
  *
- *
  * Yes the operator like filter[author.name][eq]=John could be a good extension.
  * With only filter[author.name]=John meaning an implicit [eq].
  *
  * https://discuss.jsonapi.org/t/share-propose-a-filtering-strategy/257
+ *
+ * RQL implementation for PHP
+ * https://github.com/jpcercal/resource-query-language
  */
 class FilterByTest extends TestCase
 {
@@ -76,5 +77,31 @@ class FilterByTest extends TestCase
 
         $this->assertEquals($userToSearch->name, $users->first()->name);
         $this->assertEquals($userToSearch->surname, $users->first()->surname);
+    }
+
+    /**
+     * @test
+     *
+     * Simple filtering request
+     *
+     * Request: /users?filter[name][$eq]=John&filter[surname]=Doe
+     */
+    public function itShouldUseFilterWithLogicalOperator(): void
+    {
+        $userToSearch = User::find(3);
+
+        /** @var Collection $users */
+        $users = $this->userFilter->filter([
+            'filter' => [
+                'name' => [
+                    '$eq' => $userToSearch->name,
+                ],
+                'surname' => $userToSearch->surname,
+            ],
+        ])->all();
+
+        $this->assertEquals($userToSearch->name, $users->first()->name);
+        $this->assertEquals($userToSearch->surname, $users->first()->surname);
+        $this->assertEquals($userToSearch->email, $users->first()->email);
     }
 }
