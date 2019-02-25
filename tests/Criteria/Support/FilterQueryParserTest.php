@@ -36,13 +36,13 @@ class FilterQueryParserTest extends TestCase
     /**
      * @test
      */
-    public function itShouldGetLogicalOperator(): void
+    public function itShouldGetLogicalExpression(): void
     {
         $parserWithRelation = (new FilterQueryParser('profile.name', ['$eq' => 'John']))->parse();
-        $this->assertEquals('$eq', $parserWithRelation->getOperator());
+        $this->assertEquals('$eq', $parserWithRelation->getExpression());
 
         $parserWithRelation = (new FilterQueryParser('profile.name', ['$like' => '%John%']))->parse();
-        $this->assertEquals('$like', $parserWithRelation->getOperator());
+        $this->assertEquals('$like', $parserWithRelation->getExpression());
     }
 
     /**

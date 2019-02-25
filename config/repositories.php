@@ -10,23 +10,25 @@ return [
         /*
          * List allowed logical operators for data filtering and comparision
          */
-        'allowed_operators' => [
+        'allowed_expressions' => [
             '$eq', // equal or =
+            '$notEq', // not equal or !=
             '$lt', // less than
             '$lte', // less than or equal
             '$gt', // greater than
             '$gte', // greater than or equal
             '$like',
             '$in',
-            '$not',
+            '$notIn',
             '$or',
             '$and',
+            '$between',
         ],
 
         /*
          * What comparison operator should be used by default
          */
-        'default_operator' => '$eq',
+        'default_expression' => '$eq',
 
         /*
          * Available data types are treated in different ways.

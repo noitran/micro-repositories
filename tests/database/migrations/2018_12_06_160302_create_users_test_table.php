@@ -30,6 +30,8 @@ class CreateUsersTestTable extends Migration
             $table->timestamp('disabled_at')->nullable();
             $table->timestamp('completed_at')->nullable();
 
+
+
             $table->softDeletes();
             $table->timestamps();
         });

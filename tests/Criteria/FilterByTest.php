@@ -2,6 +2,7 @@
 
 namespace Noitran\Repositories\Tests\Criteria;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Noitran\Repositories\Tests\Stubs\Filters\UserFilter;
 use Noitran\Repositories\Tests\Stubs\Models\User;
@@ -33,9 +34,6 @@ use Noitran\Repositories\Tests\TestCase;
  * With only filter[author.name]=John meaning an implicit [eq].
  *
  * https://discuss.jsonapi.org/t/share-propose-a-filtering-strategy/257
- *
- * RQL implementation for PHP
- * https://github.com/jpcercal/resource-query-language
  */
 class FilterByTest extends TestCase
 {
@@ -86,7 +84,7 @@ class FilterByTest extends TestCase
      *
      * Request: /users?filter[name][$eq]=John&filter[surname]=Doe
      */
-    public function itShouldUseFilterWithLogicalOperator(): void
+    public function itShouldUseFilterWithLogicalExpressionEqual(): void
     {
         $userToSearch = User::find(3);
 
@@ -104,4 +102,104 @@ class FilterByTest extends TestCase
         $this->assertEquals($userToSearch->surname, $users->first()->surname);
         $this->assertEquals($userToSearch->email, $users->first()->email);
     }
+
+    /**
+     *
+     *
+     * '$lt', less than
+     */
+    public function itShouldTestExpressionLt(): void
+    {
+        $greaterDate = Carbon::create()->addDays(5)->toDateTimeString();
+
+        $excludedUser = User::find(3);
+        $excludedUser->last_logged_in_at = $greaterDate;
+        $excludedUser->save();
+
+        /** @var Collection $users */
+        $users = $this->userFilter->filter([
+            'filter' => [
+                'name' => [
+                    '$lt' => $greaterDate,
+                ],
+            ],
+        ])->all();
+
+        $totalUserCount = User::all()->count();
+        
+        $this->assertCount($totalUserCount - 1, $users);
+    }
+
+    /**
+     * '$lte', less than or equal
+     */
+    public function itShouldTestExpressionLte(): void
+    {
+        //
+    }
+
+    /**
+     * '$gt', greater than
+     */
+    public function itShouldTestExpressionGt(): void
+    {
+        //
+    }
+
+    /**
+     * '$gte', greater than or equal
+     */
+    public function itShouldTestExpressionGte(): void
+    {
+        //
+    }
+
+    /**
+     * '$like'
+     */
+    public function itShouldTestExpressionLike(): void
+    {
+        //
+    }
+
+    /**
+     * '$in'
+     */
+    public function itShouldTestExpressionIn(): void
+    {
+        //
+    }
+
+    /**
+     * '$not'
+     */
+    public function itShouldTestExpressionNot(): void
+    {
+        //
+    }
+
+    /**
+     * '$or'
+     */
+    public function itShouldTestExpressionOr(): void
+    {
+        //
+    }
+
+    /**
+     * '$and'
+     */
+    public function itShouldTestExpressionAnd(): void
+    {
+        //
+    }
+
+    /*
+    Data types that should be tested:
+    '$string',
+    '$bool',
+    '$int',
+    '$date',
+    '$datetime',
+     */
 }

@@ -39,7 +39,7 @@ class FilterQueryParser
     /**
      * @var
      */
-    protected $operator;
+    protected $expression;
 
     /**
      * @var string
@@ -85,9 +85,9 @@ class FilterQueryParser
     /**
      * @return mixed
      */
-    public function getOperator()
+    public function getExpression()
     {
-        return $this->operator;
+        return $this->expression;
     }
 
     /**
@@ -99,13 +99,15 @@ class FilterQueryParser
     }
 
     /**
+     * @throws RepositoryException
+     *
      * @return FilterQueryParser
      */
     public function parse(): self
     {
         $this->relation = $this->parseRelation($this->filterParameter);
         $this->column = $this->parseColumn($this->filterParameter);
-        $this->operator = $this->parseOperator($this->filterValue);
+        $this->expression = $this->parseExpression($this->filterValue);
         $this->dataType = $this->parseDataType($this->filterValue);
         $this->value = $this->parseValue($this->filterValue);
 
@@ -149,10 +151,10 @@ class FilterQueryParser
      *
      * @return string
      */
-    protected function parseOperator($filterValue): string
+    protected function parseExpression($filterValue): string
     {
         if (! \is_array($filterValue)) {
-            return config('repositories.filtering.default_operator', '$eq');
+            return config('repositories.filtering.default_expression', '$eq');
         }
 
         return key($filterValue);

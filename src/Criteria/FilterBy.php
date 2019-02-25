@@ -12,8 +12,6 @@ use Noitran\Repositories\Filters\InteractsWithModel;
 
 /**
  * Class FilterBy.
- *
- * https://github.com/jpcercal/resource-query-language
  */
 class FilterBy implements CriteriaInterface
 {
@@ -73,28 +71,33 @@ class FilterBy implements CriteriaInterface
 
         $column = $parser->getColumn();
         $dataType = $parser->getDataType();
+        $expression = $parser->getExpression();
         $valueToSearch = $parser->getValue();
 
         if ($relation) {
-            $model = $model->whereHas($relation, function ($query) use ($column, $dataType, $valueToSearch): void {
-                $this->applyDataTypeFilter($query, $column, $dataType, $valueToSearch);
-            });
+            $model = $model->whereHas(
+                $relation,
+                function ($query) use ($column, $dataType, $expression, $valueToSearch): void {
+                    $this->applyDataTypeFilter($query, $column, $dataType, $expression, $valueToSearch);
+                }
+            );
         } else {
-            $model = $this->applyDataTypeFilter($model, $column, $dataType, $valueToSearch);
+            $model = $this->applyDataTypeFilter($model, $column, $dataType, $expression, $valueToSearch);
         }
 
         return $model;
     }
 
     /**
-     * @param Builder $builder
+     * @param $builder
      * @param $column
      * @param $dataType
+     * @param $expression
      * @param $valueToSearch
      *
      * @return Builder
      */
-    protected function applyDataTypeFilter($builder, $column, $dataType, $valueToSearch): Builder
+    protected function applyDataTypeFilter($builder, $column, $dataType, $expression, $valueToSearch): Builder
     {
         $criteria = $this->createFilterCriteria($dataType);
 

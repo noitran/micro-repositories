@@ -12,6 +12,7 @@ $factory->define(Noitran\Repositories\Tests\Stubs\Models\User::class, function (
         'surname' => $faker->lastName,
         'email' => $faker->safeEmail,
         'password' => str_random(10),
+        'last_logged_in_at' => \Carbon\Carbon::now(),
     ];
 });
 

@@ -10,7 +10,7 @@
          stopOnFailure="false"
          verbose="true">
     <testsuites>
-        <testsuite name="Opendox TestSuite">
+        <testsuite name="MicroRepositories TestSuite">
             <directory>tests/</directory>
         </testsuite>
     </testsuites>
