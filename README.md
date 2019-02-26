@@ -11,7 +11,7 @@ MicroRepositories
 
 ## About
 
-* Package adds support to work with Repository Design pattern in laravel and lumen applications. Package was created from scratch as other versions of repository pattern packages were unmaintained or poor quality. Inspired from [andersao](https://github.com/andersao). Contributions are welcome!
+* Package adds support to work with Repository Design pattern in laravel and lumen applications. Package was created from scratch as other versions of repository pattern packages were unmaintained or poor quality. Contributions are welcome!
 
 ## Install
 
