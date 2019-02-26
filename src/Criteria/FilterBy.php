@@ -69,6 +69,8 @@ class FilterBy implements CriteriaInterface
             throw new RepositoryException('Trying to filter by non existent relation.');
         }
 
+        // dd($parser->getValue());
+
         $column = $parser->getColumn();
         $dataType = $parser->getDataType();
         $expression = $parser->getExpression();
@@ -102,6 +104,7 @@ class FilterBy implements CriteriaInterface
         $criteria = $this->createFilterCriteria($dataType);
 
         $criteria->setColumn($column)
+            ->setExpression($expression)
             ->setValue($valueToSearch);
 
         return $criteria->apply($builder);

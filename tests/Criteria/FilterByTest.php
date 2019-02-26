@@ -84,7 +84,7 @@ class FilterByTest extends TestCase
      *
      * Request: /users?filter[name][$eq]=John&filter[surname]=Doe
      */
-    public function itShouldUseFilterWithLogicalExpressionEqual(): void
+    public function itShouldUseFilterWithLogicalExpressionEq(): void
     {
         $userToSearch = User::find(3);
 
@@ -104,7 +104,30 @@ class FilterByTest extends TestCase
     }
 
     /**
+     * @test
      *
+     * Request: /users?filter[name][$notEq]=John&filter[surname]=Doe
+     */
+    public function itShouldUseFilterWithLogicalExpressionNotEq(): void
+    {
+        $userToSearch = User::find(3);
+
+        /** @var Collection $users */
+        $users = $this->userFilter->filter([
+            'filter' => [
+                'name' => [
+                    '$notEq' => $userToSearch->name,
+                ],
+            ],
+        ])->all();
+
+        $totalUserCount = User::all()->count();
+
+        $this->assertCount($totalUserCount - 1, $users);
+    }
+
+    /**
+     * @test
      *
      * '$lt', less than
      */
@@ -119,7 +142,7 @@ class FilterByTest extends TestCase
         /** @var Collection $users */
         $users = $this->userFilter->filter([
             'filter' => [
-                'name' => [
+                'last_logged_in_at' => [
                     '$lt' => $greaterDate,
                 ],
             ],
@@ -131,67 +154,193 @@ class FilterByTest extends TestCase
     }
 
     /**
+     * @test
+     *
      * '$lte', less than or equal
      */
     public function itShouldTestExpressionLte(): void
     {
-        //
+        $greaterDate = Carbon::create()->addDays(5)->toDateTimeString();
+
+        $excludedUser = User::find(3);
+        $excludedUser->last_logged_in_at = $greaterDate;
+        $excludedUser->save();
+
+        /** @var Collection $users */
+        $users = $this->userFilter->filter([
+            'filter' => [
+                'last_logged_in_at' => [
+                    '$lte' => $greaterDate,
+                ],
+            ],
+        ])->all();
+
+        $totalUserCount = User::all()->count();
+
+        $this->assertCount($totalUserCount, $users);
     }
 
     /**
+     * @test
+     *
      * '$gt', greater than
      */
     public function itShouldTestExpressionGt(): void
     {
-        //
+        $greaterDate = Carbon::create()->subDays(5)->toDateTimeString();
+
+        $excludedUser = User::find(3);
+        $excludedUser->last_logged_in_at = $greaterDate;
+        $excludedUser->save();
+
+        /** @var Collection $users */
+        $users = $this->userFilter->filter([
+            'filter' => [
+                'last_logged_in_at' => [
+                    '$gt' => $greaterDate,
+                ],
+            ],
+        ])->all();
+
+        $totalUserCount = User::all()->count();
+
+        $this->assertCount($totalUserCount - 1, $users);
     }
 
     /**
+     * @test
+     *
      * '$gte', greater than or equal
      */
     public function itShouldTestExpressionGte(): void
     {
-        //
+        $greaterDate = Carbon::create()->subDays(5)->toDateTimeString();
+
+        $excludedUser = User::find(3);
+        $excludedUser->last_logged_in_at = $greaterDate;
+        $excludedUser->save();
+
+        /** @var Collection $users */
+        $users = $this->userFilter->filter([
+            'filter' => [
+                'last_logged_in_at' => [
+                    '$gte' => $greaterDate,
+                ],
+            ],
+        ])->all();
+
+        $totalUserCount = User::all()->count();
+
+        $this->assertCount($totalUserCount, $users);
     }
 
     /**
+     * @test
+     *
      * '$like'
      */
     public function itShouldTestExpressionLike(): void
     {
-        //
+        $user = new User;
+        $user->name = 'SomeRandomString';
+        $user->password = bcrypt('random');
+        $user->save();
+
+        /** @var Collection $users */
+        $users = $this->userFilter->filter([
+            'filter' => [
+                'name' => [
+                    '$like' => '%Random%',
+                ],
+            ],
+        ])->all();
+
+        $this->assertCount(1, $users);
+        $this->assertEquals($user->name, $users->first()->name);
     }
 
     /**
+     * @test
+     *
      * '$in'
      */
     public function itShouldTestExpressionIn(): void
     {
-        //
+        /** @var Collection $users */
+        $users = $this->userFilter->filter([
+            'filter' => [
+                'id' => [
+                    '$in' => '1,2',
+                ],
+            ],
+        ])->all();
+
+        $this->assertCount(2, $users);
     }
 
     /**
-     * '$not'
+     * @test
+     *
+     * '$notIn'
      */
-    public function itShouldTestExpressionNot(): void
+    public function itShouldTestExpressionNotIn(): void
     {
-        //
+        /** @var Collection $users */
+        $users = $this->userFilter->filter([
+            'filter' => [
+                'id' => [
+                    '$notIn' => '1,2',
+                ],
+            ],
+        ])->all();
+
+        $this->assertCount(3, $users);
     }
 
     /**
+     *
      * '$or'
      */
     public function itShouldTestExpressionOr(): void
     {
-        //
+        /** @var Collection $users */
+        $users = $this->userFilter->filter([
+            'filter' => [
+                'id' => [
+                    '$or' => '2|5',
+                ],
+            ],
+        ])->all();
+
+        $this->assertCount(2, $users);
     }
 
     /**
+     *
      * '$and'
      */
     public function itShouldTestExpressionAnd(): void
     {
         //
+    }
+
+    /**
+     * @test
+     *
+     * '$between'
+     */
+    public function itShouldTestExpressionBetween(): void
+    {
+        /** @var Collection $users */
+        $users = $this->userFilter->filter([
+            'filter' => [
+                'id' => [
+                    '$between' => '1,3',
+                ],
+            ],
+        ])->all();
+
+        $this->assertCount(3, $users);
     }
 
     /*

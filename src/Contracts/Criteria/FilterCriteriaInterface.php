@@ -17,6 +17,13 @@ interface FilterCriteriaInterface
     public function setColumn($column): FilterCriteriaInterface;
 
     /**
+     * @param $expression
+     *
+     * @return FilterCriteriaInterface
+     */
+    public function setExpression($expression): FilterCriteriaInterface;
+
+    /**
      * @param $value
      *
      * @return FilterCriteriaInterface
@@ -29,14 +36,20 @@ interface FilterCriteriaInterface
     public function getColumn();
 
     /**
+     * @return string
+     */
+    public function getExpression(): string;
+
+
+    /**
      * @return mixed
      */
     public function getValue();
 
     /**
-     * @param Builder $model
+     * @param Builder $builder
      *
      * @return Builder
      */
-    public function apply($model): Builder;
+    public function apply($builder): Builder;
 }

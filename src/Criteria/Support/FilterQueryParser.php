@@ -2,6 +2,7 @@
 
 namespace Noitran\Repositories\Criteria\Support;
 
+use Illuminate\Support\Str;
 use Noitran\Repositories\Exceptions\RepositoryException;
 
 /**
@@ -195,7 +196,7 @@ class FilterQueryParser
     {
         $value = $this->extractValue($filterValue);
 
-        if (strpos($value, ':') !== false) {
+        if (Str::startsWith($value, ['$']) && strpos($value, ':') !== false) {
             $lastColonPosition = strpos($value, ':');
 
             return substr($value, $lastColonPosition + 1);
