@@ -21,7 +21,6 @@ return [
             '$in',
             '$notIn',
             '$or',
-            '$and',
             '$between',
         ],
 

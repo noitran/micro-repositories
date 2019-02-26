@@ -4,7 +4,7 @@ namespace Noitran\Repositories\Criteria\Support;
 
 use Illuminate\Database\Eloquent\Builder;
 use Noitran\Repositories\Contracts\Criteria\FilterCriteriaInterface;
-use Noitran\RQL\Expressions\AbstractExpr;
+use Noitran\RQL\Contracts\Expression\ExprInterface;
 use Noitran\RQL\ExprQueue;
 use Noitran\RQL\Processors\EloquentProcessor;
 
@@ -106,9 +106,9 @@ abstract class AbstractFilterCriteria implements FilterCriteriaInterface
     }
 
     /**
-     * @return AbstractExpr
+     * @return ExprInterface
      */
-    protected function createExprClass(): AbstractExpr
+    protected function createExprClass(): ExprInterface
     {
         $expression = ucfirst($this->getExpression(true));
         $namespace = 'Noitran\RQL\Expressions\\';

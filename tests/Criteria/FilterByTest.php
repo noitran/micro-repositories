@@ -298,6 +298,7 @@ class FilterByTest extends TestCase
     }
 
     /**
+     * @test
      *
      * '$or'
      */
@@ -313,15 +314,8 @@ class FilterByTest extends TestCase
         ])->all();
 
         $this->assertCount(2, $users);
-    }
-
-    /**
-     *
-     * '$and'
-     */
-    public function itShouldTestExpressionAnd(): void
-    {
-        //
+        $this->assertEquals(2, $users->toArray()[0]['id']);
+        $this->assertEquals(5, $users->toArray()[1]['id']);
     }
 
     /**
