@@ -74,7 +74,7 @@ class User extends Model
 
 * First let's create Interface of our Repository
 
-```
+```php
 <?php
 
 namespace App\Data\Repositories\User;
@@ -149,3 +149,64 @@ class AppServiceProvider extends ServiceProvider
     }
 }
 ```
+
+## Filters
+
+* Filters are sitting on top of Repositories and uses Criteria to enable query filtering abilities with built in and / or custom Criteria.
+
+* Creating filter class is easy. Example:
+
+```php
+<?php
+
+namespace App\Data\Filters\User;
+
+use Noitran\Repositories\Filters\AbstractFilter;
+use App\Data\Repositories\User\UserRepository;
+
+class UserFilter extends AbstractFilter
+{
+    /**
+     * @var array
+     */
+    protected $queryFilters = [
+        // List of custom Criteria filters 
+    ];
+
+    /**
+     * UserFilter constructor.
+     *
+     * @param UserRepository $userRepository
+     */
+    public function __construct(UserRepository $userRepository)
+    {
+        parent::__construct();
+
+        $this->setRepository($userRepository)
+            ->setQueryFilters($this->queryFilters);
+    }
+
+    /**
+     * @param array $requestAttributes
+     *
+     * @return mixed
+     */
+    public function filter(array $requestAttributes)
+    {
+        $input = $this->getInput(
+            $this->queryFilters,
+            $requestAttributes
+        );
+
+        $this->repository = $this->pushFilters($this->repository, $input);
+
+        return $this;
+    }
+}
+```
+
+* After creating UserFilter you are now able to use built in Filtering Criteria and add your custom. Filters acts as layer between HTTP Requests and Repositories giving you ability to use RQL (Request Query Language), ordering, sorting and pagination capabilities out of the box.
+
+## Criteria
+
+@todo
