@@ -94,8 +94,9 @@ abstract class AbstractFilterCriteria implements FilterCriteriaInterface
     /**
      * @param Builder $builder
      *
-     * @return Builder
      * @throws \Noitran\RQL\Exceptions\ExpressionException
+     *
+     * @return Builder
      */
     public function apply($builder): Builder
     {

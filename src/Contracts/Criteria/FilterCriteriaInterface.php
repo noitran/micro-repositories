@@ -40,7 +40,6 @@ interface FilterCriteriaInterface
      */
     public function getExpression(): string;
 
-
     /**
      * @return mixed
      */

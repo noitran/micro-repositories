@@ -21,24 +21,6 @@ class UserFilter extends AbstractFilter
     {
         parent::__construct();
 
-        $this->setRepository($userRepository)
-            ->setQueryFilters($this->queryFilters);
-    }
-
-    /**
-     * @param array $requestAttributes
-     *
-     * @return mixed
-     */
-    public function filter(array $requestAttributes)
-    {
-        $input = $this->getInput(
-            $this->queryFilters,
-            $requestAttributes
-        );
-
-        $this->repository = $this->pushFilters($this->repository, $input);
-
-        return $this;
+        $this->setRepository($userRepository);
     }
 }

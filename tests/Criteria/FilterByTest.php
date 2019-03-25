@@ -241,7 +241,7 @@ class FilterByTest extends TestCase
      */
     public function itShouldTestExpressionLike(): void
     {
-        $user = new User;
+        $user = new User();
         $user->name = 'SomeRandomString';
         $user->password = bcrypt('random');
         $user->save();
@@ -337,12 +337,51 @@ class FilterByTest extends TestCase
         $this->assertCount(3, $users);
     }
 
-    /*
-    Data types that should be tested:
-    '$string',
-    '$bool',
-    '$int',
-    '$date',
-    '$datetime',
+    /**
+     * @test
      */
+    public function itShouldUseDefaultDataType(): void
+    {
+        // '$string',
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldUseStringDataType(): void
+    {
+        // '$string',
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldUseBoolDataType(): void
+    {
+        // '$bool',
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldUseIntDataType(): void
+    {
+        // '$int',
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldUseDateDataType(): void
+    {
+        // '$date',
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldUseDatetimeDataType(): void
+    {
+        // '$datetime',
+    }
 }
