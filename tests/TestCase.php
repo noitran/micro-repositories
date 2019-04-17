@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Tests;
 
+use Illuminate\Database\Eloquent\Factory as EloquentFactory;
+use Noitran\Repositories\ServiceProvider;
 use Noitran\Repositories\Tests\Stubs\Repositories\UserRepository;
 use Noitran\Repositories\Tests\Stubs\Repositories\UserRepositoryEloquent;
 use Noitran\Repositories\Tests\Support\Reflections;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
-use Noitran\Repositories\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 
 /**
- * Class TestCase
+ * Class TestCase.
  */
 abstract class TestCase extends OrchestraTestCase
 {
@@ -49,8 +51,6 @@ abstract class TestCase extends OrchestraTestCase
      * Register factories.
      *
      * @param string $path
-     *
-     * @return void
      */
     protected function registerEloquentFactoriesFrom($path): void
     {

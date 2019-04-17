@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Criteria\Support;
 
 use Illuminate\Support\Str;
 use Noitran\Repositories\Exceptions\RepositoryException;
 
 /**
- * Class FilterQueryParser
+ * Class FilterQueryParser.
  *
  * http://localhost:8104/users?filter[name][eq]=John&filter[surname]=Doe
  */
@@ -122,7 +124,7 @@ class FilterQueryParser
      */
     protected function parseRelation($filterParameter): ?string
     {
-        if (strpos($filterParameter, '.') !== false) {
+        if (false !== strpos($filterParameter, '.')) {
             $lastDotPosition = strrpos($filterParameter, '.');
 
             return substr($filterParameter, 0, $lastDotPosition);
@@ -138,7 +140,7 @@ class FilterQueryParser
      */
     protected function parseColumn($filterParameter): string
     {
-        if (strpos($filterParameter, '.') !== false) {
+        if (false !== strpos($filterParameter, '.')) {
             $lastDotPosition = strrpos($filterParameter, '.');
 
             return substr($filterParameter, $lastDotPosition + 1);
@@ -172,7 +174,7 @@ class FilterQueryParser
     {
         $value = $this->extractValue($filterValue);
 
-        if (strpos($value, ':') !== false) {
+        if (false !== strpos($value, ':')) {
             $lastColonPosition = strpos($value, ':');
 
             $parsedDataType = substr($value, 0, $lastColonPosition);
@@ -196,7 +198,7 @@ class FilterQueryParser
     {
         $value = $this->extractValue($filterValue);
 
-        if (Str::startsWith($value, ['$']) && strpos($value, ':') !== false) {
+        if (Str::startsWith($value, ['$']) && false !== strpos($value, ':')) {
             $lastColonPosition = strpos($value, ':');
 
             return substr($value, $lastColonPosition + 1);
@@ -229,7 +231,7 @@ class FilterQueryParser
      */
     private function isValidDataType($dataType, $strict = false): bool
     {
-        if (! in_array($dataType, config('repositories.filtering.allowed_data_types', '$string'), true)) {
+        if (! \in_array($dataType, config('repositories.filtering.allowed_data_types', '$string'), true)) {
             if ($strict) {
                 throw new RepositoryException('Invalid/Unallowed data type passed.');
             }

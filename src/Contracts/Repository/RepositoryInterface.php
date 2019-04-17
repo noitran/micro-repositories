@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Contracts\Repository;
 
 use Illuminate\Database\Eloquent\Model;
 use Noitran\Repositories\Exceptions\RepositoryException;
 
 /**
- * Interface RepositoryInterface
+ * Interface RepositoryInterface.
  */
 interface RepositoryInterface
 {
     /**
-     * Get list of records
+     * Get list of records.
      *
      * @param array $columns
      *
@@ -22,7 +24,7 @@ interface RepositoryInterface
     public function all($columns = ['*']);
 
     /**
-     * Get collection of paginated records
+     * Get collection of paginated records.
      *
      * @param int|null $perPage
      * @param array $columns
@@ -44,7 +46,7 @@ interface RepositoryInterface
     public function simplePaginate(int $perPage = null, $columns = ['*']);
 
     /**
-     * Get single or multiple records by their primary ids
+     * Get single or multiple records by their primary ids.
      *
      * @param mixed $id
      * @param array $columns
@@ -67,7 +69,7 @@ interface RepositoryInterface
     public function findByField($field, $value = null, $columns = ['*']);
 
     /**
-     * Count results of repository
+     * Count results of repository.
      *
      * @param array $columns
      *

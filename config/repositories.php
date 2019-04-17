@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     'generators' => [
         'resource_paths' => [
             'models' => 'App\Data\Models\\',
@@ -15,7 +16,6 @@ return [
      * Request filters that will be applied by default, allowing to use them in each query
      */
     'filtering' => [
-
         /*
          * List allowed logical operators for data filtering and comparision
          */
@@ -59,7 +59,6 @@ return [
          * List of default query filters
          */
         'default_filters' => [
-
             /*
              * Adds Criteria to support Json:Api filtering recommendation
              * https://jsonapi.org/recommendations/#filtering
@@ -90,7 +89,6 @@ return [
          * Query parameters applied by default to each request
          */
         'default_settings' => [
-
             /*
              * Use pagination in requests by default
              */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Filters;
 
 use Noitran\Repositories\Contracts\Filter\FilterInterface;
@@ -9,7 +11,7 @@ use Noitran\Repositories\Repositories\AbstractRepository;
 use Noitran\Repositories\Requests\InteractsWithRequest;
 
 /**
- * Class AbstractFilter
+ * Class AbstractFilter.
  */
 abstract class AbstractFilter implements FilterInterface
 {
@@ -117,7 +119,7 @@ abstract class AbstractFilter implements FilterInterface
         return array_merge(
             $this->getQuerySettings(),
             array_filter($input, function ($value) {
-                return $value !== null;
+                return null !== $value;
             })
         );
     }

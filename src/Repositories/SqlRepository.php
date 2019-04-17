@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Repositories;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class SqlRepository
+ * Class SqlRepository.
  */
 abstract class SqlRepository extends AbstractRepository
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function all($columns = ['*'])
     {
@@ -20,7 +22,7 @@ abstract class SqlRepository extends AbstractRepository
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function paginate(int $perPage = null, $columns = ['*'])
     {
@@ -31,7 +33,7 @@ abstract class SqlRepository extends AbstractRepository
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function simplePaginate(int $perPage = null, $columns = ['*'])
     {
@@ -42,7 +44,7 @@ abstract class SqlRepository extends AbstractRepository
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function find($id, $columns = ['*'])
     {
@@ -53,7 +55,7 @@ abstract class SqlRepository extends AbstractRepository
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function findByField($field, $value = null, $columns = ['*'])
     {
@@ -65,7 +67,7 @@ abstract class SqlRepository extends AbstractRepository
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function first($columns = ['*']): ?Model
     {

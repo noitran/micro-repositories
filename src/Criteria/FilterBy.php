@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Criteria;
 
+use Illuminate\Database\Eloquent\Builder;
 use Noitran\Repositories\Contracts\Criteria\CriteriaInterface;
 use Noitran\Repositories\Contracts\Criteria\FilterCriteriaInterface;
 use Noitran\Repositories\Contracts\Repository\RepositoryInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Noitran\Repositories\Criteria\Support\FilterQueryParser;
 use Noitran\Repositories\Exceptions\RepositoryException;
 use Noitran\Repositories\Filters\InteractsWithModel;

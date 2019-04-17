@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 
-/** @var EloquentFactory $factory */
+/* @var EloquentFactory $factory */
 
-/** User */
+/* User */
 $factory->define(Noitran\Repositories\Tests\Stubs\Models\User::class, function (Faker $faker) {
     return [
         'name' => $faker->firstName,
@@ -16,7 +18,7 @@ $factory->define(Noitran\Repositories\Tests\Stubs\Models\User::class, function (
     ];
 });
 
-/** Post */
+/* Post */
 $factory->define(Noitran\Repositories\Tests\Stubs\Models\Post::class, function (Faker $faker) {
     return [
         'title' => $faker->sentence(3),
@@ -29,7 +31,7 @@ $factory->define(Noitran\Repositories\Tests\Stubs\Models\Post::class, function (
     ];
 });
 
-/** Comment */
+/* Comment */
 $factory->define(Noitran\Repositories\Tests\Stubs\Models\Comment::class, function (Faker $faker) {
     return [
         'content' => $faker->paragraph,
@@ -42,7 +44,7 @@ $factory->define(Noitran\Repositories\Tests\Stubs\Models\Comment::class, functio
     ];
 });
 
-/** Tag */
+/* Tag */
 $factory->define(Noitran\Repositories\Tests\Stubs\Models\Tag::class, function (Faker $faker) {
     return [
         'name' => $faker->country,

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Criteria\Support;
 
-use Noitran\Repositories\Contracts\Criteria\FilterCriteriaInterface;
 use Illuminate\Support\Carbon;
+use Noitran\Repositories\Contracts\Criteria\FilterCriteriaInterface;
 
 /**
- * Class DateCriteria
+ * Class DateCriteria.
  */
 class DateCriteria extends AbstractFilterCriteria
 {

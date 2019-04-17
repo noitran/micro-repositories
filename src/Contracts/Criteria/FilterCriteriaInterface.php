@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Contracts\Criteria;
 
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Interface FilterCriteriaInterface
+ * Interface FilterCriteriaInterface.
  */
 interface FilterCriteriaInterface
 {
@@ -14,21 +16,21 @@ interface FilterCriteriaInterface
      *
      * @return FilterCriteriaInterface
      */
-    public function setColumn($column): FilterCriteriaInterface;
+    public function setColumn($column): self;
 
     /**
      * @param $expression
      *
      * @return FilterCriteriaInterface
      */
-    public function setExpression($expression): FilterCriteriaInterface;
+    public function setExpression($expression): self;
 
     /**
      * @param $value
      *
      * @return FilterCriteriaInterface
      */
-    public function setValue($value): FilterCriteriaInterface;
+    public function setValue($value): self;
 
     /**
      * @return mixed

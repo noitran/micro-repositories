@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Tests\Support;
 
 use ReflectionClass;
-use ReflectionProperty;
 use ReflectionException;
 use ReflectionMethod;
+use ReflectionProperty;
 
 /**
- * Trait Reflections
+ * Trait Reflections.
  */
 trait Reflections
 {

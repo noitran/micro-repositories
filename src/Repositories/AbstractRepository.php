@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Repositories;
 
+use Closure;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Noitran\Repositories\Contracts\Repository\Criticizable;
 use Noitran\Repositories\Contracts\Repository\RepositoryInterface;
 use Noitran\Repositories\Contracts\Schema\SchemaInterface;
@@ -12,11 +16,9 @@ use Noitran\Repositories\Events\EntityCreated;
 use Noitran\Repositories\Events\EntityDeleted;
 use Noitran\Repositories\Events\EntityUpdated;
 use Noitran\Repositories\Exceptions\RepositoryException;
-use Illuminate\Support\Collection;
-use Closure;
 
 /**
- * Class AbstractRepository
+ * Class AbstractRepository.
  */
 abstract class AbstractRepository implements RepositoryInterface, SchemaInterface, Criticizable
 {
@@ -68,14 +70,14 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     }
 
     /**
-     * Returns model's fully qualified class name
+     * Returns model's fully qualified class name.
      *
      * @return string
      */
     abstract public function getModelClassName(): string;
 
     /**
-     * Fires when repository is created
+     * Fires when repository is created.
      */
     abstract public function boot(): void;
 
@@ -98,7 +100,7 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     }
 
     /**
-     * Clears model
+     * Clears model.
      *
      * @throws RepositoryException
      */
@@ -122,7 +124,7 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     }
 
     /**
-     * Clears query scope
+     * Clears query scope.
      *
      * @return $this
      */
@@ -134,13 +136,13 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     }
 
     /**
-     * Apply scope in current Query
+     * Apply scope in current Query.
      *
      * @return $this
      */
     protected function applyScope(): self
     {
-        if (isset($this->scope) && is_callable($this->scope)) {
+        if (isset($this->scope) && \is_callable($this->scope)) {
             $callback = $this->scope;
             $this->model = $callback($this->model);
         }
@@ -149,7 +151,7 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     }
 
     /**
-     * Get list of records
+     * Get list of records.
      *
      * @param array $columns
      *
@@ -175,7 +177,7 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     }
 
     /**
-     * Alias of all()
+     * Alias of all().
      *
      * @param array $columns
      *
@@ -189,7 +191,7 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     }
 
     /**
-     * Get collection of paginated records
+     * Get collection of paginated records.
      *
      * @param int|null $perPage
      * @param array $columns
@@ -247,7 +249,7 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     }
 
     /**
-     * Get single or multiple records by their primary ids
+     * Get single or multiple records by their primary ids.
      *
      * @param mixed $id
      * @param array $columns
@@ -292,7 +294,7 @@ abstract class AbstractRepository implements RepositoryInterface, SchemaInterfac
     }
 
     /**
-     * Count results of repository
+     * Count results of repository.
      *
      * @param array $columns
      *

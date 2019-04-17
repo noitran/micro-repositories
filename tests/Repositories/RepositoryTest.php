@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Tests\Criteria;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Mockery;
 use Noitran\Repositories\Events\EntityCreated;
 use Noitran\Repositories\Events\EntityDeleted;
 use Noitran\Repositories\Events\EntityUpdated;
 use Noitran\Repositories\Tests\Stubs\Models\User;
 use Noitran\Repositories\Tests\Stubs\Repositories\UserRepository;
 use Noitran\Repositories\Tests\TestCase;
-use Mockery;
 
 /**
- * Class RepositoryTest
+ * Class RepositoryTest.
  */
 class RepositoryTest extends TestCase
 {
@@ -37,7 +39,7 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function itShouldGetRecordsUsingAllMethod(): void
+    public function it_should_get_records_using_all_method(): void
     {
         $users = $this->repository->all();
 
@@ -48,7 +50,7 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function itShouldGetSingleRecordUsingFindMethod(): void
+    public function it_should_get_single_record_using_find_method(): void
     {
         $user = $this->repository->find(1);
 
@@ -59,7 +61,7 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function itShouldGetMultipleRecordsUsingFindMethod(): void
+    public function it_should_get_multiple_records_using_find_method(): void
     {
         $users = $this->repository->find([1, 2]);
 
@@ -70,7 +72,7 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function itShouldFindByField(): void
+    public function it_should_find_by_field(): void
     {
         $userToFind = User::find(3);
 
@@ -84,7 +86,7 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function itShouldGetPaginatedCollectionUsingPaginateMethod(): void
+    public function it_should_get_paginated_collection_using_paginate_method(): void
     {
         $users = $this->repository->paginate(3);
 
@@ -95,7 +97,7 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function itShouldGetPaginatedCollectionUsingSimplePaginateMethod(): void
+    public function it_should_get_paginated_collection_using_simple_paginate_method(): void
     {
         $users = $this->repository->simplePaginate(3);
 
@@ -106,7 +108,7 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function itShouldGetResultsUsingFirstMethod(): void
+    public function it_should_get_results_using_first_method(): void
     {
         $user = $this->repository->first();
 
@@ -117,7 +119,7 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function itShouldCreateNewModel(): void
+    public function it_should_create_new_model(): void
     {
         $this->expectsEvents(EntityCreated::class);
 
@@ -136,7 +138,7 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function itShouldUpdateModelById(): void
+    public function it_should_update_model_by_id(): void
     {
         $this->expectsEvents(EntityUpdated::class);
 
@@ -154,7 +156,7 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function itShouldUpdateModelByModel(): void
+    public function it_should_update_model_by_model(): void
     {
         $this->expectsEvents(EntityUpdated::class);
 
@@ -172,7 +174,7 @@ class RepositoryTest extends TestCase
     /**
      * @test
      */
-    public function itShouldDeleteModelByModelId(): void
+    public function it_should_delete_model_by_model_id(): void
     {
         $this->expectsEvents(EntityDeleted::class);
 
@@ -190,7 +192,7 @@ class RepositoryTest extends TestCase
      *
      * @throws \Noitran\Repositories\Exceptions\RepositoryException
      */
-    public function itShouldDeleteModelByModel(): void
+    public function it_should_delete_model_by_model(): void
     {
         $this->expectsEvents(EntityDeleted::class);
 

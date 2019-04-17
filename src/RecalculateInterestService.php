@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace FinCore\Domain\Invoice\Service\InterestCalculation;
 
@@ -55,7 +55,7 @@ class RecalculateInterestService implements RecalculateInterestServiceInterface
 
     /**
      * @param Invoice $invoice
-     * @param         $overdueDays
+     * @param $overdueDays
      *
      * @throws \Common\Service\MoneyMathematics\MathOperationException
      *

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Criteria\Support;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -9,7 +11,7 @@ use Noitran\RQL\ExprQueue;
 use Noitran\RQL\Processors\EloquentProcessor;
 
 /**
- * Class AbstractFilterCriteria
+ * Class AbstractFilterCriteria.
  */
 abstract class AbstractFilterCriteria implements FilterCriteriaInterface
 {

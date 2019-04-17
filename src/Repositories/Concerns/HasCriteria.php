@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Repositories\Concerns;
 
 use Illuminate\Support\Collection;
@@ -7,12 +9,12 @@ use Noitran\Repositories\Contracts\Criteria\CriteriaInterface;
 use Noitran\Repositories\Exceptions\RepositoryException;
 
 /**
- * Trait HasCriteria
+ * Trait HasCriteria.
  */
 trait HasCriteria
 {
     /**
-     * Collection of Criteria
+     * Collection of Criteria.
      *
      * @var Collection
      */
@@ -24,7 +26,7 @@ trait HasCriteria
     protected $disableCriteria = false;
 
     /**
-     * Get Collection of Criteria
+     * Get Collection of Criteria.
      *
      * @return Collection|null
      */
@@ -34,7 +36,7 @@ trait HasCriteria
     }
 
     /**
-     * Disable/Enable all Criteria
+     * Disable/Enable all Criteria.
      *
      * @param bool $disable
      *
@@ -48,7 +50,7 @@ trait HasCriteria
     }
 
     /**
-     * Push Criteria into Collection
+     * Push Criteria into Collection.
      *
      * @param $criteria
      *
@@ -58,13 +60,13 @@ trait HasCriteria
      */
     public function pushCriteria($criteria): self
     {
-        if (is_string($criteria)) {
+        if (\is_string($criteria)) {
             $criteria = new $criteria();
         }
 
-        if (!$criteria instanceof CriteriaInterface) {
+        if (! $criteria instanceof CriteriaInterface) {
             throw new RepositoryException(
-                'Class ' . get_class($criteria) . ' must be an instance of ' . CriteriaInterface::class
+                'Class ' . \get_class($criteria) . ' must be an instance of ' . CriteriaInterface::class
             );
         }
 
@@ -74,7 +76,7 @@ trait HasCriteria
     }
 
     /**
-     * Remove Criteria from collection
+     * Remove Criteria from collection.
      *
      * @param $criteria
      *
@@ -83,28 +85,28 @@ trait HasCriteria
     public function popCriteria($criteria): self
     {
         $this->criteria = $this->criteria->reject(function ($value) use ($criteria) {
-            if (is_object($value) && is_string($criteria)) {
-                return get_class($value) === $criteria;
+            if (\is_object($value) && \is_string($criteria)) {
+                return \get_class($value) === $criteria;
             }
 
-            if (is_string($value) && is_object($criteria)) {
-                return $value === get_class($criteria);
+            if (\is_string($value) && \is_object($criteria)) {
+                return $value === \get_class($criteria);
             }
 
-            return get_class($value) === get_class($criteria);
+            return \get_class($value) === \get_class($criteria);
         });
 
         return $this;
     }
 
     /**
-     * Apply criteria in current Query
+     * Apply criteria in current Query.
      *
      * @return $this
      */
     protected function applyCriteria(): self
     {
-        if ($this->disableCriteria === true) {
+        if (true === $this->disableCriteria) {
             return $this;
         }
 
@@ -124,7 +126,7 @@ trait HasCriteria
     }
 
     /**
-     * Clear all Criteria
+     * Clear all Criteria.
      *
      * @return $this
      */

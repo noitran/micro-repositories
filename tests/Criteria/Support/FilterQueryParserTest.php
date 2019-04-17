@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Tests\Criteria\Support;
 
 use Noitran\Repositories\Criteria\Support\FilterQueryParser;
 use Noitran\Repositories\Tests\TestCase;
 
 /**
- * Class FilterQueryParserTest
+ * Class FilterQueryParserTest.
  */
 class FilterQueryParserTest extends TestCase
 {
     /**
      * @test
      */
-    public function itShouldInitClass(): void
+    public function it_should_init_class(): void
     {
         $parser = new FilterQueryParser('profile.name', 'John');
         $this->assertInstanceOf(FilterQueryParser::class, $parser);
@@ -22,21 +24,21 @@ class FilterQueryParserTest extends TestCase
     /**
      * @test
      */
-    public function itShouldGetRelationAndColumnName(): void
+    public function it_should_get_relation_and_column_name(): void
     {
         $parserWithRelation = (new FilterQueryParser('profile.name', 'John'))->parse();
         $this->assertEquals('profile', $parserWithRelation->getRelation());
         $this->assertEquals('name', $parserWithRelation->getColumn());
 
         $parserWithoutRelation = (new FilterQueryParser('name', 'John'))->parse();
-        $this->assertEquals(null, $parserWithoutRelation->getRelation());
+        $this->assertNull($parserWithoutRelation->getRelation());
         $this->assertEquals('name', $parserWithRelation->getColumn());
     }
 
     /**
      * @test
      */
-    public function itShouldGetLogicalExpression(): void
+    public function it_should_get_logical_expression(): void
     {
         $parserWithRelation = (new FilterQueryParser('profile.name', ['$eq' => 'John']))->parse();
         $this->assertEquals('$eq', $parserWithRelation->getExpression());
@@ -48,7 +50,7 @@ class FilterQueryParserTest extends TestCase
     /**
      * @test
      */
-    public function itShouldGetDataTypeAndValue(): void
+    public function it_should_get_data_type_and_value(): void
     {
         $parser = (new FilterQueryParser('profile.name', 'John'))->parse();
         $this->assertEquals('John', $parser->getValue());

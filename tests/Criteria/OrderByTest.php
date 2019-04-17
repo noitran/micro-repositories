@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Tests\Criteria;
 
 use Noitran\Repositories\Criteria\OrderBy;
@@ -8,7 +10,7 @@ use ReflectionClass;
 use ReflectionException;
 
 /**
- * Class OrderByTest
+ * Class OrderByTest.
  */
 class OrderByTest extends TestCase
 {
@@ -17,7 +19,7 @@ class OrderByTest extends TestCase
      *
      * @throws \ReflectionException
      */
-    public function itShouldSuccessfullyCreateOrderByCriteria(): void
+    public function it_should_successfully_create_order_by_criteria(): void
     {
         // Get mock, without the constructor being called
         $mock = $this->getMockBuilder(OrderBy::class)
@@ -40,7 +42,7 @@ class OrderByTest extends TestCase
      *
      * @throws ReflectionException
      */
-    public function itShouldTestSetOrderByParameters(): void
+    public function it_should_test_set_order_by_parameters(): void
     {
         $class = new OrderBy('created_at,desc');
 

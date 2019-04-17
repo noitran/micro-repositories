@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Filters;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Trait InteractsWithModel
+ * Trait InteractsWithModel.
  */
 trait InteractsWithModel
 {
