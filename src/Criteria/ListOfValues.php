@@ -49,7 +49,7 @@ abstract class ListOfValues implements CriteriaInterface
      *
      * @return Builder
      */
-    public function apply($model, RepositoryInterface $repository): Builder
+    public function apply($model, RepositoryInterface $repository) //: Builder
     {
         $column = $repository->getColumnName($this->getField(), $model);
 

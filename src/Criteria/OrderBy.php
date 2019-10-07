@@ -61,7 +61,7 @@ class OrderBy implements CriteriaInterface
      *
      * @return Builder
      */
-    public function apply($model, RepositoryInterface $repository): Builder
+    public function apply($model, RepositoryInterface $repository) // : Builder
     {
         if (empty($this->column)) {
             return $model;

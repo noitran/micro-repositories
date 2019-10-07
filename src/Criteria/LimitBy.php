@@ -34,7 +34,7 @@ class LimitBy implements CriteriaInterface
      *
      * @return Builder
      */
-    public function apply($model, RepositoryInterface $repository): Builder
+    public function apply($model, RepositoryInterface $repository) //: Builder
     {
         if ($this->count) {
             return $model->limit($this->count);

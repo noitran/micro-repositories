@@ -11,7 +11,7 @@ interface FilterInterface
      *
      * @return mixed
      */
-    public function filter($requestAttributes);
+    public function filter(array $requestAttributes);
 
     /**
      * @return mixed

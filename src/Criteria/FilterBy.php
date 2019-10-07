@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Noitran\Repositories\Criteria;
 
+use Noitran\RQL\Parsers\Model;
+use Noitran\RQL\Parsers\Request\Illuminate\RequestParser;
+use Noitran\RQL\Parsers\Simple\SimpleParser;
+use function is_array;
+
 use Illuminate\Database\Eloquent\Builder;
 use Noitran\Repositories\Contracts\Criteria\CriteriaInterface;
 use Noitran\Repositories\Contracts\Criteria\FilterCriteriaInterface;
@@ -42,54 +47,52 @@ class FilterBy implements CriteriaInterface
      *
      * @return Builder
      */
-    public function apply($model, RepositoryInterface $repository): Builder
+    public function apply($model, RepositoryInterface $repository) //: Builder
     {
-        if (! empty($this->attributes) && \is_array($this->attributes)) {
-            foreach ($this->attributes as $parameter => $value) {
-                $model = $this->applyFilter($model, $parameter, $value);
-            }
+        if (empty($this->attributes) || ! is_array($this->attributes)) {
+            return $model;
+        }
+
+        $collection = (new SimpleParser($this->attributes))->parse();
+
+        foreach ($collection as $item) {
+            $model = $this->applyFilter($model, $item);
         }
 
         return $model;
     }
 
     /**
-     * @param $model
-     * @param $parameter
-     * @param $value
-     *
-     * @throws RepositoryException
-     *
+     * @param $builderModel
+     * @param $queryModel
      * @return Builder
+     * @throws RepositoryException
      */
-    protected function applyFilter($model, $parameter, $value): Builder
+    protected function applyFilter($builderModel, Model $queryModel): Builder
     {
-        $parser = (new FilterQueryParser($parameter, $value))->parse();
-        $relation = $parser->getRelation();
+        $relation = $queryModel->getRelation();
 
-        if ($relation && ! $this->modelHasRelation($model->getModel(), $relation)) {
+        if ($relation && ! $this->modelHasRelation($builderModel->getModel(), $relation)) {
             throw new RepositoryException('Trying to filter by non existent relation.');
         }
 
-        // dd($parser->getValue());
-
-        $column = $parser->getColumn();
-        $dataType = $parser->getDataType();
-        $expression = $parser->getExpression();
-        $valueToSearch = $parser->getValue();
+        $column = $queryModel->getField();
+        $dataType = $queryModel->getDataType();
+        $expression = $queryModel->getExpression();
+        $valueToSearch = $queryModel->getValue();
 
         if ($relation) {
-            $model = $model->whereHas(
+            $builderModel = $builderModel->whereHas(
                 $relation,
                 function ($query) use ($column, $dataType, $expression, $valueToSearch): void {
                     $this->applyDataTypeFilter($query, $column, $dataType, $expression, $valueToSearch);
                 }
             );
         } else {
-            $model = $this->applyDataTypeFilter($model, $column, $dataType, $expression, $valueToSearch);
+            $builderModel = $this->applyDataTypeFilter($builderModel, $column, $dataType, $expression, $valueToSearch);
         }
 
-        return $model;
+        return $builderModel;
     }
 
     /**

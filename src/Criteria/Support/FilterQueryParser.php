@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 use Noitran\Repositories\Exceptions\RepositoryException;
 
 /**
+ * @deprecated Moved to RQL
+ *
  * Class FilterQueryParser.
  *
  * http://localhost:8104/users?filter[name][eq]=John&filter[surname]=Doe
@@ -108,6 +110,8 @@ class FilterQueryParser
      */
     public function parse(): self
     {
+        // dd($this->filterParameter);
+
         $this->relation = $this->parseRelation($this->filterParameter);
         $this->column = $this->parseColumn($this->filterParameter);
         $this->expression = $this->parseExpression($this->filterValue);

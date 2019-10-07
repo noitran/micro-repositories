@@ -43,6 +43,7 @@ abstract class TestCase extends OrchestraTestCase
     protected function getPackageProviders($app): array
     {
         return [
+            \Noitran\RQL\ServiceProvider::class,
             ServiceProvider::class,
         ];
     }
