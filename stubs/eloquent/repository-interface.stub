@@ -1,0 +1,13 @@
+<?php
+
+namespace DummyNamespace;
+
+use Noitran\Repositories\Contracts\Repository\RepositoryInterface;
+
+/**
+ * Interface {{entity}}Repository
+ */
+interface {{entity}}Repository extends RepositoryInterface
+{
+    //
+}

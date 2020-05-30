@@ -31,11 +31,17 @@ abstract class AbstractFilter implements FilterInterface
     protected $querySettings = [];
 
     /**
+     * @var FilterStra
+     */
+    protected $filterEngine;
+
+    /**
      * AbstractFilter constructor.
      */
     public function __construct()
     {
-        $this->setQuerySettings();
+        $this->setQuerySettings()
+            ->setQueryFilters($this->queryFilters);
     }
 
     /**
@@ -99,7 +105,7 @@ abstract class AbstractFilter implements FilterInterface
      *
      * @return array
      */
-    public function getInput(array $queryFilters = [], array $request = []): array
+    protected function getInput(array $queryFilters = [], array $request = []): array
     {
         $queryKeys = array_keys($this->getQuerySettings());
 
@@ -122,7 +128,7 @@ abstract class AbstractFilter implements FilterInterface
      *
      * @return RepositoryInterface
      */
-    public function pushFilters(RepositoryInterface $repository, array $input = []): RepositoryInterface
+    protected function pushFilters(RepositoryInterface $repository, array $input = []): RepositoryInterface
     {
         foreach ($this->getQueryFilters() as $filter) {
             if (isset($input[$filter['queryParameter']])) {
@@ -171,6 +177,23 @@ abstract class AbstractFilter implements FilterInterface
     public function setWithCount($relations): self
     {
         $this->repository->withCount($relations);
+
+        return $this;
+    }
+
+    /**
+     * @param array $requestAttributes
+     *
+     * @return mixed
+     */
+    public function filter(array $requestAttributes)
+    {
+        $input = $this->getInput(
+            $this->queryFilters,
+            $requestAttributes
+        );
+
+        $this->repository = $this->pushFilters($this->repository, $input);
 
         return $this;
     }

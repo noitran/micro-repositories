@@ -5,11 +5,11 @@ namespace Noitran\Repositories\Contracts\Filter;
 interface FilterInterface
 {
     /**
-     * @param array $requestAttributes
+     * @param mixed $requestAttributes
      *
      * @return mixed
      */
-    public function filter(array $requestAttributes);
+    public function filter($requestAttributes);
 
     /**
      * @return mixed

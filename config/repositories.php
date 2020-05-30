@@ -2,6 +2,15 @@
 
 return [
 
+    'generators' => [
+        'resource_paths' => [
+            'models' => 'App\Data\Models\\',
+            'filters' => 'App\Data\Filters\\',
+            'criteria' => 'App\Data\Criteria\\',
+            'repositories' => 'App\Data\Repositories\\',
+        ],
+    ],
+
     /*
      * Request filters that will be applied by default, allowing to use them in each query
      */

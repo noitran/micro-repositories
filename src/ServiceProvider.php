@@ -3,6 +3,7 @@
 namespace Noitran\Repositories;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
+use Noitran\Repositories\Contracts\Filter\FilterStrategy;
 
 /**
  * Class ServiceProvider
@@ -40,5 +41,12 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $configPath = __DIR__ . '/../config/repositories.php';
         $this->mergeConfigFrom($configPath, 'repositories');
+
+        // $this->registerFilter();
     }
+
+//    protected function registerFilter(): void
+//    {
+//        $this->app->bind(FilterStrategy::class, )
+//    }
 }
