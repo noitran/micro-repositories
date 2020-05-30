@@ -20,14 +20,14 @@
     ],
     "license": "LGPL-3.0",
     "require": {
-        "php": ">=7.1",
-        "illuminate/support": "~5.7",
-        "noitran/rql": "~0.2"
+        "php": ">=7.3",
+        "illuminate/support": "^5.8|^6.0",
+        "noitran/rql": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "~7.0",
-        "orchestra/testbench": "~3.4.2|~3.5.0|~3.6.0|~3.7.0",
-        "nesbot/carbon": "^1.26.3"
+        "phpunit/phpunit": "~8.3",
+        "orchestra/testbench": "~3.8.0",
+        "nesbot/carbon": "^2.23.0"
     },
     "autoload": {
         "psr-4": {
@@ -46,6 +46,7 @@
             ]
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
 

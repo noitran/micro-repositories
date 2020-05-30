@@ -1,6 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 return [
+    'generators' => [
+        'resource_paths' => [
+            'models' => 'App\Data\Models\\',
+            'filters' => 'App\Data\Filters\\',
+            'criteria' => 'App\Data\Criteria\\',
+            'repositories' => 'App\Data\Repositories\\',
+        ],
+    ],
 
     'generators' => [
         'resource_paths' => [
@@ -15,51 +25,10 @@ return [
      * Request filters that will be applied by default, allowing to use them in each query
      */
     'filtering' => [
-
-        /*
-         * List allowed logical operators for data filtering and comparision
-         */
-        'allowed_expressions' => [
-            '$eq', // equal or =
-            '$notEq', // not equal or !=
-            '$lt', // less than
-            '$lte', // less than or equal
-            '$gt', // greater than
-            '$gte', // greater than or equal
-            '$like',
-            '$in',
-            '$notIn',
-            '$or',
-            '$between',
-        ],
-
-        /*
-         * What comparison operator should be used by default
-         */
-        'default_expression' => '$eq',
-
-        /*
-         * Available data types are treated in different ways.
-         * List of allowed data types
-         */
-        'allowed_data_types' => [
-            '$string',
-            '$bool',
-            '$int',
-            '$date',
-            '$datetime',
-        ],
-
-        /*
-         * How will be search values processed by default
-         */
-        'default_data_type' => '$string',
-
         /*
          * List of default query filters
          */
         'default_filters' => [
-
             /*
              * Adds Criteria to support Json:Api filtering recommendation
              * https://jsonapi.org/recommendations/#filtering
@@ -90,7 +59,6 @@ return [
          * Query parameters applied by default to each request
          */
         'default_settings' => [
-
             /*
              * Use pagination in requests by default
              */

@@ -1,0 +1,1 @@
+C:37:"PHPUnit\Runner\DefaultTestResultCache":224:{a:2:{s:7:"defects";a:1:{s:76:"Noitran\Repositories\Tests\Criteria\FilterByTest::it_should_use_basic_filter";i:4;}s:5:"times";a:1:{s:76:"Noitran\Repositories\Tests\Criteria\FilterByTest::it_should_use_basic_filter";d:0.857;}}}

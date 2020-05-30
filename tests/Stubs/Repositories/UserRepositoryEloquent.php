@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Tests\Stubs\Repositories;
 
 use Noitran\Repositories\Repositories\SqlRepository;
 use Noitran\Repositories\Tests\Stubs\Models\User;
 
 /**
- * Class UserRepositoryEloquent
+ * Class UserRepositoryEloquent.
  */
 class UserRepositoryEloquent extends SqlRepository implements UserRepository
 {
@@ -25,6 +27,5 @@ class UserRepositoryEloquent extends SqlRepository implements UserRepository
      */
     public function boot(): void
     {
-        //
     }
 }

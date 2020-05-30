@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Criteria\Support;
 
 use Noitran\Repositories\Contracts\Criteria\FilterCriteriaInterface;
 
 /**
- * Class StringCriteria
+ * Class StringCriteria.
  */
 class StringCriteria extends AbstractFilterCriteria
 {

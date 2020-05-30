@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Criteria;
 
+use Illuminate\Database\Eloquent\Builder;
 use Noitran\Repositories\Contracts\Criteria\CriteriaInterface;
 use Noitran\Repositories\Contracts\Repository\RepositoryInterface;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Class ListOfValues
+ * Class ListOfValues.
  */
 abstract class ListOfValues implements CriteriaInterface
 {
@@ -27,7 +29,7 @@ abstract class ListOfValues implements CriteriaInterface
     }
 
     /**
-     * Returns field name in schema
+     * Returns field name in schema.
      *
      * @return mixed
      */
@@ -47,7 +49,7 @@ abstract class ListOfValues implements CriteriaInterface
      *
      * @return Builder
      */
-    public function apply($model, RepositoryInterface $repository): Builder
+    public function apply($model, RepositoryInterface $repository) //: Builder
     {
         $column = $repository->getColumnName($this->getField(), $model);
 

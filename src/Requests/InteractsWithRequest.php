@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Requests;
 
 use Illuminate\Support\Arr;
 
 /**
- * Trait InteractsWithRequest
+ * Trait InteractsWithRequest.
  */
 trait InteractsWithRequest
 {

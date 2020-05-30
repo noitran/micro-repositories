@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Contracts\Schema;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Interface SchemaInterface
+ * Interface SchemaInterface.
  */
 interface SchemaInterface
 {

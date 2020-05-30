@@ -1,21 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Tests;
 
+use Faker\Generator as Faker;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Collection;
 use Noitran\Repositories\Tests\Stubs\Models\Comment;
-use Noitran\Repositories\Tests\Stubs\Models\User;
 use Noitran\Repositories\Tests\Stubs\Models\Post;
 use Noitran\Repositories\Tests\Stubs\Models\Tag;
-use Illuminate\Database\Seeder;
-use Faker\Generator as Faker;
-use Illuminate\Support\Collection;
+use Noitran\Repositories\Tests\Stubs\Models\User;
 
 class PostTestSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {

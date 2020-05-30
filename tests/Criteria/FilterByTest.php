@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Tests\Criteria;
 
 use Carbon\Carbon;
@@ -9,7 +11,7 @@ use Noitran\Repositories\Tests\Stubs\Models\User;
 use Noitran\Repositories\Tests\TestCase;
 
 /**
- * Class FilterByTest
+ * Class FilterByTest.
  *
  * https://jsonapi.org/recommendations/#filtering
  *
@@ -51,7 +53,6 @@ class FilterByTest extends TestCase
 
     public function tearDown(): void
     {
-        //
     }
 
     /**
@@ -61,7 +62,7 @@ class FilterByTest extends TestCase
      *
      * Request: /users?filter[name]=John&filter[surname]=Doe
      */
-    public function itShouldUseBasicFilter(): void
+    public function it_should_use_basic_filter(): void
     {
         $userToSearch = User::find(3);
 
@@ -84,7 +85,7 @@ class FilterByTest extends TestCase
      *
      * Request: /users?filter[name][$eq]=John&filter[surname]=Doe
      */
-    public function itShouldUseFilterWithLogicalExpressionEq(): void
+    public function it_should_use_filter_with_logical_expression_eq(): void
     {
         $userToSearch = User::find(3);
 
@@ -108,7 +109,7 @@ class FilterByTest extends TestCase
      *
      * Request: /users?filter[name][$notEq]=John&filter[surname]=Doe
      */
-    public function itShouldUseFilterWithLogicalExpressionNotEq(): void
+    public function it_should_use_filter_with_logical_expression_not_eq(): void
     {
         $userToSearch = User::find(3);
 
@@ -131,7 +132,7 @@ class FilterByTest extends TestCase
      *
      * '$lt', less than
      */
-    public function itShouldTestExpressionLt(): void
+    public function it_should_test_expression_lt(): void
     {
         $greaterDate = Carbon::create()->addDays(5)->toDateTimeString();
 
@@ -149,7 +150,7 @@ class FilterByTest extends TestCase
         ])->all();
 
         $totalUserCount = User::all()->count();
-        
+
         $this->assertCount($totalUserCount - 1, $users);
     }
 
@@ -158,7 +159,7 @@ class FilterByTest extends TestCase
      *
      * '$lte', less than or equal
      */
-    public function itShouldTestExpressionLte(): void
+    public function it_should_test_expression_lte(): void
     {
         $greaterDate = Carbon::create()->addDays(5)->toDateTimeString();
 
@@ -185,7 +186,7 @@ class FilterByTest extends TestCase
      *
      * '$gt', greater than
      */
-    public function itShouldTestExpressionGt(): void
+    public function it_should_test_expression_gt(): void
     {
         $greaterDate = Carbon::create()->subDays(5)->toDateTimeString();
 
@@ -212,7 +213,7 @@ class FilterByTest extends TestCase
      *
      * '$gte', greater than or equal
      */
-    public function itShouldTestExpressionGte(): void
+    public function it_should_test_expression_gte(): void
     {
         $greaterDate = Carbon::create()->subDays(5)->toDateTimeString();
 
@@ -239,9 +240,9 @@ class FilterByTest extends TestCase
      *
      * '$like'
      */
-    public function itShouldTestExpressionLike(): void
+    public function it_should_test_expression_like(): void
     {
-        $user = new User;
+        $user = new User();
         $user->name = 'SomeRandomString';
         $user->password = bcrypt('random');
         $user->save();
@@ -264,7 +265,7 @@ class FilterByTest extends TestCase
      *
      * '$in'
      */
-    public function itShouldTestExpressionIn(): void
+    public function it_should_test_expression_in(): void
     {
         /** @var Collection $users */
         $users = $this->userFilter->filter([
@@ -283,7 +284,7 @@ class FilterByTest extends TestCase
      *
      * '$notIn'
      */
-    public function itShouldTestExpressionNotIn(): void
+    public function it_should_test_expression_not_in(): void
     {
         /** @var Collection $users */
         $users = $this->userFilter->filter([
@@ -302,7 +303,7 @@ class FilterByTest extends TestCase
      *
      * '$or'
      */
-    public function itShouldTestExpressionOr(): void
+    public function it_should_test_expression_or(): void
     {
         /** @var Collection $users */
         $users = $this->userFilter->filter([
@@ -323,7 +324,7 @@ class FilterByTest extends TestCase
      *
      * '$between'
      */
-    public function itShouldTestExpressionBetween(): void
+    public function it_should_test_expression_between(): void
     {
         /** @var Collection $users */
         $users = $this->userFilter->filter([
@@ -340,7 +341,7 @@ class FilterByTest extends TestCase
     /**
      * @test
      */
-    public function itShouldUseDefaultDataType(): void
+    public function it_should_use_default_data_type(): void
     {
         // '$string',
     }
@@ -348,7 +349,7 @@ class FilterByTest extends TestCase
     /**
      * @test
      */
-    public function itShouldUseStringDataType(): void
+    public function it_should_use_string_data_type(): void
     {
         // '$string',
     }
@@ -356,7 +357,7 @@ class FilterByTest extends TestCase
     /**
      * @test
      */
-    public function itShouldUseBoolDataType(): void
+    public function it_should_use_bool_data_type(): void
     {
         // '$bool',
     }
@@ -364,7 +365,7 @@ class FilterByTest extends TestCase
     /**
      * @test
      */
-    public function itShouldUseIntDataType(): void
+    public function it_should_use_int_data_type(): void
     {
         // '$int',
     }
@@ -372,7 +373,7 @@ class FilterByTest extends TestCase
     /**
      * @test
      */
-    public function itShouldUseDateDataType(): void
+    public function it_should_use_date_data_type(): void
     {
         // '$date',
     }
@@ -380,7 +381,7 @@ class FilterByTest extends TestCase
     /**
      * @test
      */
-    public function itShouldUseDatetimeDataType(): void
+    public function it_should_use_datetime_data_type(): void
     {
         // '$datetime',
     }

@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Tests\Criteria;
 
-use Noitran\Repositories\Tests\Stubs\Filters\UserFilter;
-use Noitran\Repositories\Tests\TestCase;
 use Illuminate\Support\Fluent;
 use Mockery;
+use Noitran\Repositories\Tests\Stubs\Filters\UserFilter;
+use Noitran\Repositories\Tests\TestCase;
 
 /**
- * Class FilterTest
+ * Class FilterTest.
  */
 class FilterTest extends TestCase
 {
@@ -32,7 +34,7 @@ class FilterTest extends TestCase
     /**
      * @test
      */
-    public function itShouldTestAbstractGetInputMethod(): void
+    public function it_should_test_abstract_get_input_method(): void
     {
         $queryFilters = [
             [
@@ -66,7 +68,7 @@ class FilterTest extends TestCase
         $this->assertEquals($expected->get('surname'), $input['surname']);
         $this->assertEquals($expected->get('from_date'), $input['from_date']);
 
-        $this->assertEquals(false, $input['paginate']);
+        $this->assertFalse($input['paginate']);
         $this->assertEquals('created_at,desc', $input['order_by']);
         $this->assertEquals(1, $input['page']);
     }
@@ -74,7 +76,7 @@ class FilterTest extends TestCase
     /**
      * @test
      */
-    public function itShouldOverrideDefaultQuerySettings(): void
+    public function it_should_override_default_query_settings(): void
     {
         $queryFilters = [
             [

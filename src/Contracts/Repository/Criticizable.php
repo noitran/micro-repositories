@@ -1,23 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Contracts\Repository;
 
 use Illuminate\Support\Collection;
 
 /**
- * Interface Criticizable
+ * Interface Criticizable.
  */
 interface Criticizable
 {
     /**
-     * Get Collection of Criteria
+     * Get Collection of Criteria.
      *
      * @return Collection|null
      */
     public function getCriteria(): ?Collection;
 
     /**
-     * Disable/Enable all Criteria
+     * Disable/Enable all Criteria.
      *
      * @param bool $disable
      *
@@ -26,7 +28,7 @@ interface Criticizable
     public function disableCriteria($disable = true);
 
     /**
-     * Push Criteria into Collection
+     * Push Criteria into Collection.
      *
      * @param $criteria
      *
@@ -35,7 +37,7 @@ interface Criticizable
     public function pushCriteria($criteria);
 
     /**
-     * Remove Criteria from collection
+     * Remove Criteria from collection.
      *
      * @param $criteria
      *
@@ -44,7 +46,7 @@ interface Criticizable
     public function popCriteria($criteria);
 
     /**
-     * Clear all Criteria
+     * Clear all Criteria.
      *
      * @return mixed
      */

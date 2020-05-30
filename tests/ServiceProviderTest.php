@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Tests;
 
+use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Noitran\Repositories\ServiceProvider;
 use ReflectionClass;
-use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 /**
- * Class ServiceProviderTest
+ * Class ServiceProviderTest.
  */
 class ServiceProviderTest extends TestCase
 {
@@ -16,7 +18,7 @@ class ServiceProviderTest extends TestCase
      *
      * @throws \ReflectionException
      */
-    public function itShouldSubClassServiceProviderClass(): void
+    public function it_should_sub_class_service_provider_class(): void
     {
         $reflectionClass = new ReflectionClass(ServiceProvider::class);
 

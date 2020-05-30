@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Noitran\Repositories\Contracts\Filter\FilterStrategy;
 
 /**
- * Class ServiceProvider
+ * Class ServiceProvider.
  */
 class ServiceProvider extends IlluminateServiceProvider
 {
@@ -18,13 +20,10 @@ class ServiceProvider extends IlluminateServiceProvider
         return __DIR__ . '/../config/repositories.php';
     }
 
-    /**
-     * @return void
-     */
     public function boot(): void
     {
         $configPath = __DIR__ . '/../config/repositories.php';
-        if (function_exists('config_path')) {
+        if (\function_exists('config_path')) {
             $publishPath = config_path('repositories.php');
         } else {
             $publishPath = base_path('config/repositories.php');
@@ -34,8 +33,6 @@ class ServiceProvider extends IlluminateServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register(): void
     {

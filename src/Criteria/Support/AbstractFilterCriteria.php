@@ -1,100 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Criteria\Support;
 
 use Illuminate\Database\Eloquent\Builder;
 use Noitran\Repositories\Contracts\Criteria\FilterCriteriaInterface;
 use Noitran\RQL\Contracts\Expression\ExprInterface;
-use Noitran\RQL\ExprQueue;
-use Noitran\RQL\Processors\EloquentProcessor;
+use Noitran\RQL\Contracts\Processor\ProcessorInterface;
+use Noitran\RQL\Queues\ExprQueue;
+use Noitran\RQL\Processors\Eloquent\EloquentProcessor;
 
 /**
- * Class AbstractFilterCriteria
+ * Class AbstractFilterCriteria.
  */
 abstract class AbstractFilterCriteria implements FilterCriteriaInterface
 {
     /**
-     * @var string|null
-     */
-    protected $relation;
-
-    /**
-     * @var string
-     */
-    protected $column;
-
-    /**
-     * @var
-     */
-    protected $expression;
-
-    /**
-     * @var mixed
-     */
-    protected $value;
-
-    /**
-     * @return string|null
-     */
-    public function getRelation(): ?string
-    {
-        return $this->relation;
-    }
-
-    /**
-     * @return string
-     */
-    public function getColumn(): string
-    {
-        return $this->column;
-    }
-
-    /**
-     * @param bool $replace
-     *
-     * @return string
-     */
-    public function getExpression(bool $replace = false): string
-    {
-        return $replace ? str_replace('$', '', $this->expression) : $this->expression;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * @param $column
-     *
-     * @return FilterCriteriaInterface
-     */
-    public function setColumn($column): FilterCriteriaInterface
-    {
-        $this->column = $column;
-
-        return $this;
-    }
-
-    /**
-     * @param $expression
-     *
-     * @return FilterCriteriaInterface
-     */
-    public function setExpression($expression): FilterCriteriaInterface
-    {
-        $this->expression = $expression;
-
-        return $this;
-    }
-
-    /**
      * @param Builder $builder
      *
      * @return Builder
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
      * @throws \Noitran\RQL\Exceptions\ExpressionException
      */
     public function apply($builder): Builder
@@ -102,7 +29,9 @@ abstract class AbstractFilterCriteria implements FilterCriteriaInterface
         $queue = new ExprQueue();
         $queue->enqueue($this->createExprClass());
 
-        return (new EloquentProcessor($builder))->process($queue);
+        return app()->make(ProcessorInterface::class)->setBuilder($builder)->process($queue);
+
+        // return (new EloquentProcessor($builder))->process($queue);
     }
 
     /**

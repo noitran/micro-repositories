@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Contracts\Criteria;
 
 use Noitran\Repositories\Contracts\Repository\RepositoryInterface;
 
 /**
- * Interface CriteriaInterface
+ * Interface CriteriaInterface.
  */
 interface CriteriaInterface
 {
     /**
-     * Apply criteria in query repository
+     * Apply criteria in query repository.
      *
      * @param $model
      * @param RepositoryInterface $repository

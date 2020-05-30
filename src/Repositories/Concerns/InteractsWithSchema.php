@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Repositories\Concerns;
 
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Trait InteractsWithSchema
+ * Trait InteractsWithSchema.
  */
 trait InteractsWithSchema
 {

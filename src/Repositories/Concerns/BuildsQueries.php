@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Repositories\Concerns;
 
 /**
- * Trait BuildsQueries
+ * Trait BuildsQueries.
  */
 trait BuildsQueries
 {
     /**
-     * Eager load relations
+     * Eager load relations.
      *
      * @param array|string $relations
      *

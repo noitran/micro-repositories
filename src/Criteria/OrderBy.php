@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Noitran\Repositories\Criteria;
 
+use Illuminate\Database\Eloquent\Builder;
 use Noitran\Repositories\Contracts\Criteria\CriteriaInterface;
 use Noitran\Repositories\Contracts\Repository\RepositoryInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Noitran\Repositories\Exceptions\ValidationException;
 
 class OrderBy implements CriteriaInterface
@@ -20,7 +22,7 @@ class OrderBy implements CriteriaInterface
     protected $direction;
 
     /**
-     * Allowed characters for order by column
+     * Allowed characters for order by column.
      *
      * @var string
      */
@@ -38,8 +40,6 @@ class OrderBy implements CriteriaInterface
 
     /**
      * @param $orderBy
-     *
-     * @return void
      */
     public function setOrderByParameters($orderBy): void
     {
@@ -61,7 +61,7 @@ class OrderBy implements CriteriaInterface
      *
      * @return Builder
      */
-    public function apply($model, RepositoryInterface $repository): Builder
+    public function apply($model, RepositoryInterface $repository) // : Builder
     {
         if (empty($this->column)) {
             return $model;
